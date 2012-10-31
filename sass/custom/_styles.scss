@@ -1,0 +1,19 @@
+// This File is imported last, and will override other styles in the cascade
+// Add styles here to make changes without digging in too much
+
+h1 a {
+  text-decoration: none;
+}
+
+/* Navigation */
+$nav-bg: transparent !default;
+$nav-bg-front: transparent !default;
+$nav-bg-back: transparent !default;
+$nav-color: $text-color !default;
+$nav-color-hover: $link-color !default;
+$nav-placeholder: desaturate(darken($text-color, 10), 15) !default;
+$nav-border: lighten($text-color-light, 38) !default;
+$nav-border-top: lighten($site-bg, 50) !default;
+$nav-border-bottom: $nav-border !default;
+$nav-border-left: $nav-border !default;
+$nav-border-right: #fff !default;
