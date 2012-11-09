@@ -17,35 +17,37 @@ I was very addicted to Letterpress until I figured out how to win consistently.
 
 ![winning](/assets/images/letterpress/winning.png)
 
-As it turns out, the dictionary is stored locally. So, if you can add
-words to Letterpress' dictionary, you can play any word you want. The
+As it turns out, Letterpress' dictionary is stored locally. So, by adding
+words to Letterpress' dictionary, you can score points by playing non-existent words. The
 dictionary is stored in a series of text files in `/<Letterpress
 folder>/Letterpress.app/o/[aa-zz].txt`. For instance, `ab.txt` contains all the words
-that begin with aa, and so forth.  This makes it easy to cheat at letterpress, and I decided to write an app to help me do it.
+that begin with aa, and so forth.  
 
-It's a common misconception that you need to jailbreak a phone to
+This makes it easy to cheat at letterpress, and I decided to write an app to help me do it.
+
+First things first, it's a common misconception that you need to jailbreak a phone to
 access an individual app's files. iOS application directories are
 actually accessible on non-jailbroken phones through the API that
-iTunes uses to sync to your phone. Tools like
+iTunes uses for syncing. Tools like
 [iExplorer](http://www.macroplant.com/iexplorer/) allow you to, among
 other things, access an app's directory and modify the files there. I
-imagine they are using undocumented calls in the iTunes libraries to
-do this.
+believe they are using undocumented calls in the iTunes libraries to
+do this.  
 
-Since I didn't want to rely on a 3rd party paid app like iExplorer, I
+Since I didn't want to rely on a 3rd party paid tool like iExplorer, I
 used libimobiledevice.
-[libimobiledevice](http://www.libimobiledevice.org/) is an open-source
-library that allows you to talk to iOS devices, and it includes the
-API. It works on both OS X and Linux.
+[libimobiledevice](http://www.libimobiledevice.org/). It's an open-source
+implementation of that same iTunes API, and allows access to a lot of iOS internals over USB.
+It works on both OS X and Linux.
 
-I ended up writing a ruby gem that acts as an adapter for
-libimobiledevice. It's available on github as
-[imobiledevice](https://github.com/stateio/imobiledevice). So far, I
-implemented only the small subset of libimobiledevice that I needed,
+I wrote ruby gem that acts as an adapter for
+libimobiledevice and exposes some of the API calls in an object-oriented way. It's available on github as
+[imobiledevice](https://github.com/stateio/imobiledevice). So far, I have
+implemented only the small subset of libimobiledevice that I need,
 but I certainly welcome pull reqests. It's very cool to be able to
 talk to your iPhone from ruby.
 
-Once I had a ruby wrapper for for libimobiledevice, it was very easy to write an app that adds any word you want to the dictionary.  I call it [letterpress-lexicographer](https://github.com/stateio/letterpress-lexicographer).  Here's how it works:
+Once I had a ruby wrapper for for libimobiledevice, it was very easy to write an app that adds arbitrary words to the Letterpress dictionary.  I call it [letterpress-lexicographer](https://github.com/stateio/letterpress-lexicographer).  Here's how it works:
 
 ## Is this a word?
 
