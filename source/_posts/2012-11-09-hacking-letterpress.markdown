@@ -11,10 +11,9 @@ author: Max Veytsman
 that came out a few weeks ago and quickly became popular enough to
 take down Apple's GameCenter. It's basically a cross between Boggle
 and Go. Players take turns building words from a board of 25 letters.
-Using a letter captures it, and your goal is to score points by
-capturing your oppenents letters.
+You score points by capturing the letters you play.
 
-I got pretty addicted to it for a time, but I found that figuring out how to consistently win cured me of my addiction.
+I was very addicted to Letterpress until I figured out how to win consistently.
 
 ![winning](/assets/images/letterpress/winning.png)
 
@@ -22,7 +21,7 @@ As it turns out, the dictionary is stored locally. So, if you can add
 words to Letterpress' dictionary, you can play any word you want. The
 dictionary is stored in a series of text files in `/<Letterpress
 folder>/Letterpress.app/o/[aa-zz].txt`. For instance, `ab.txt` contains all the words
-that begin with aa, and so forth.  It's thus pretty easy to cheat at letterpress, and I decided to write an app to help me do it.
+that begin with aa, and so forth.  This makes it easy to cheat at letterpress, and I decided to write an app to help me do it.
 
 It's a common misconception that you need to jailbreak a phone to
 access an individual app's files. iOS application directories are
@@ -33,11 +32,11 @@ other things, access an app's directory and modify the files there. I
 imagine they are using undocumented calls in the iTunes libraries to
 do this.
 
-I didn't want to rely on a 3rd party paid app like iExplorer, so I
+Since I didn't want to rely on a 3rd party paid app like iExplorer, I
 used libimobiledevice.
 [libimobiledevice](http://www.libimobiledevice.org/) is an open-source
 library that allows you to talk to iOS devices, and it includes the
-API. It works on OS X and Linux.
+API. It works on both OS X and Linux.
 
 I ended up writing a ruby gem that acts as an adapter for
 libimobiledevice. It's available on github as
