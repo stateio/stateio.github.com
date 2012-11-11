@@ -7,47 +7,55 @@ categories:
 author: Max Veytsman
 ---
 
-[Letterpress](http://www.atebits.com/letterpress/) is an iphone game
+[Letterpress](http://www.atebits.com/letterpress/) is an iPhone game
 that came out a few weeks ago and quickly became popular enough to
-take down Apple's GameCenter. It's basically a cross between Boggle
-and Go. Players take turns building words from a board of 25 letters.
-You score points by capturing the letters you play.
+take down Apple's GameCenter. It's a cross between Boggle and Go. The
+game is played on a board of 25 letters. Players take turns building
+words in order to capture the letters they use. 
 
-I was very addicted to Letterpress until I figured out how to win consistently.
+I found myself addicted to Letterpress until I figured out how to win consistently.
 
 ![winning](/assets/images/letterpress/winning.png)
 
-As it turns out, Letterpress' dictionary is stored locally. So, by adding
-words to Letterpress' dictionary, you can score points by playing non-existent words. The
-dictionary is stored in a series of text files in `/<Letterpress
-folder>/Letterpress.app/o/[aa-zz].txt`. For instance, `ab.txt` contains all the words
-that begin with aa, and so forth.  
+As it turns out, Letterpress's dictionary is stored locally on the
+phone. By adding words to Letterpress's dictionary, you can play any
+combination of letters as word. For instance, you can play a word made
+up of all the letters on the board like in the above screenshot.  
 
-This makes it easy to cheat at letterpress, and I decided to write an app to help me do it.
+The dictionary is stored in a
+series of text files in `/<Letterpress
+folder>/Letterpress.app/o/[aa-zz].txt`. For instance, `ab.txt`
+contains all the words that begin with aa, and so forth.
 
-First things first, it's a common misconception that you need to jailbreak a phone to
-access an individual app's files. iOS application directories are
-actually accessible on non-jailbroken phones through the API that
-iTunes uses for syncing. Tools like
+Modifying the dictionary makes it easy to cheat at letterpress, and I decided to
+write a tool to help me do it.
+
+First of all, it's a common misconception that you need to jailbreak a
+phone to access an individual app's files. Actually, iOS application
+directories are accessible on non-jailbroken phones. Tools like
 [iExplorer](http://www.macroplant.com/iexplorer/) allow you to, among
 other things, access an app's directory and modify the files there. I
-believe they are using undocumented calls in the iTunes libraries to
-do this.  
+believe they are using undocumented calls in the library iTunes uses for syncing to
+do this.
 
-Since I didn't want to rely on a 3rd party paid tool like iExplorer, I
-used libimobiledevice.
-[libimobiledevice](http://www.libimobiledevice.org/). It's an open-source
-implementation of that same iTunes API, and allows access to a lot of iOS internals over USB.
-It works on both OS X and Linux.
+Since I didn't want to rely on a third party paid tool like iExplorer,
+I decided to use libimobiledevice.
+[libimobiledevice](http://www.libimobiledevice.org/). Libimobiledevice
+is an open-source library for talking to iDevices over USB. It
+supports filesystem access, access to iPhone internals, and much more.
+Libimobiledevice supports both OS X and Linux.
 
-I wrote ruby gem that acts as an adapter for
+I wrote a ruby gem that acts as an adapter for
 libimobiledevice and exposes some of the API calls in an object-oriented way. It's available on github as
 [imobiledevice](https://github.com/stateio/imobiledevice). So far, I have
 implemented only the small subset of libimobiledevice that I need,
-but I certainly welcome pull reqests. It's very cool to be able to
-talk to your iPhone from ruby.
+but I certainly welcome pull reqests.
 
-Once I had a ruby wrapper for for libimobiledevice, it was very easy to write an app that adds arbitrary words to the Letterpress dictionary.  I call it [letterpress-lexicographer](https://github.com/stateio/letterpress-lexicographer).  Here's how it works:
+Once I had a ruby wrapper for for libimobiledevice, it was simple to
+write an app that adds arbitrary words to the Letterpress dictionary.
+I call it
+[letterpress-lexicographer](https://github.com/stateio/letterpress-lexicographer).
+Here's how it works:
 
 ## Is this a word?
 
