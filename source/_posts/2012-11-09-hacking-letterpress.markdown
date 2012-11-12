@@ -16,7 +16,7 @@ I was hopelessly addicted to Letterpress until I figured out how to win consiste
 
 As it turns out, Letterpress's dictionary and word check is stored and performed locally on your
 phone. By simply adding words to Letterpress's dictionary, you can register any
-combination of letters as a valid word.
+combination of letters as a valid word. 
 
 Inside your iPhone, the dictionary is spread across a
 series of text files located in `/<Letterpress
@@ -24,7 +24,9 @@ folder>/Letterpress.app/o/[ab-zz].txt`. For instance, `ab.txt`
 contains all the words that begin with aa, and so on and so forth.
 
 However, digging around a bunch of text files is no fun, and so I decided to
-write a tool to help me out.
+write a tool to help me out.  
+
+By the way, the author of Letterpress does [know](https://twitter.com/lorenb/status/261617107656138752) about people cheating this way. I can also see why he made the choice to store the dictionary locally. Letterpress generated a crazy amount of traffic without all the extra requests from checking a server-side dictionary. And it is, after all, just a word game.    
 
 ## Automating Letterpress cheating
 
