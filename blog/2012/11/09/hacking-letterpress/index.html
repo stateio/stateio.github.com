@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Hacking Letterpress - Finite State</title>
+  <meta name="author" content="State Machienry">
+
+  
+  <meta name="description" content="Letterpress is an iOS game
+that came out a few weeks ago and immediately became popular enough to take down Apple&#8217;s GameCenter. It&#8217;s a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stateio.github.com/blog/2012/11/09/hacking-letterpress/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Finite State" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body  >
+  <header role="banner">  <h1><a href="/">Finite State</a></h1>
+  
+
+</header>
+  <nav role="navigation">  
+<ul class="main-navigation">
+  <li><a href="http://state.io">State Machinery</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Hacking Letterpress</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/mveytsman">Max Veytsman</a></span></span>
+
+        
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-11-09T14:38:00-05:00" pubdate data-updated="true">Nov 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://www.atebits.com/letterpress/">Letterpress</a> is an iOS game
+that came out a few weeks ago and immediately became popular enough to <a href="https://twitter.com/marcoarment/statuses/261337316268859392">take down Apple&#8217;s GameCenter</a>. It&#8217;s a cross between <a href="http://daringfireball.net/linked/2012/10/24/letterpress">Scrabble and Go</a>. The game is played on a board made out of 25 letters and players take turns building words in order to capture the letters they use.</p>
+
+<p>I was hopelessly addicted to Letterpress until I figured out how to win consistently.</p>
+
+<p><img src="/assets/images/letterpress/winning.png" alt="winning" /></p>
+
+<p>As it turns out, Letterpress&#8217;s dictionary and word check is stored and performed locally on your
+phone. By simply adding words to Letterpress&#8217;s dictionary, you can register any
+combination of letters as a valid word.</p>
+
+<p>Inside your iPhone, the dictionary is spread across a
+series of text files located in <code>/&lt;Letterpress
+folder&gt;/Letterpress.app/o/[ab-zz].txt</code>. For instance, <code>ab.txt</code>
+contains all the words that begin with aa, and so on and so forth.</p>
+
+<p>However, digging around a bunch of text files is no fun, and so I decided to
+write a tool to help me out.</p>
+
+<h2>Automating Letterpress cheating</h2>
+
+<p>First of all, it&#8217;s a common misconception that you need to jailbreak a
+phone in order to access an individual app&#8217;s files.
+Tools like
+<a href="http://www.macroplant.com/iexplorer/">iExplorer</a> allow you to, among
+other things, access an app&#8217;s directory and modify the files there on any iPhone. (It&#8217;s my understanding that they&#8217;re using undocumented calls in the library iTunes uses for syncing in order to
+pull this off.)</p>
+
+<p>Since I didn&#8217;t want to rely on a third party paid tool like iExplorer,
+I decided to use libimobiledevice.
+<a href="http://www.libimobiledevice.org/">libimobiledevice</a>. Libimobiledevice
+is an open-source library for talking to iDevices over USB. It&#8217;s capable of providing
+access to the filesystem, the iPhone internals, and much more.
+Libimobiledevice supports both OS X and Linux.</p>
+
+<p>So, I wrote a ruby gem that acts as an adapter for
+libimobiledevice and exposes some of the API calls in an object-oriented way. It&#8217;s available on github as
+<a href="https://github.com/stateio/imobiledevice">imobiledevice</a>. So far, I have
+implemented only the small subset of libimobiledevice that I need,
+but I definitely welcome pull requests.</p>
+
+<p>Once I had a ruby wrapper for for libimobiledevice, it was simple to
+write an app that adds arbitrary words to the Letterpress dictionary.
+I call it
+<a href="https://github.com/stateio/letterpress-lexicographer">letterpress-lexicographer</a>.
+Here&#8217;s how it works:</p>
+
+<h2>Is this a word?</h2>
+
+<p><img src="/assets/images/letterpress/before.png" alt="Before" /></p>
+
+<h2>Shucks!</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./letterpress-lexicographer.rb
+</span><span class='line'> [*] Connecting to iDevice
+</span><span class='line'> [*] Connected to iDevice. UDID:REDACTED
+</span><span class='line'> [*] Accessing Letterpress app
+</span><span class='line'> [*] Accessed Letterpress app
+</span><span class='line'> [?] What word would you like to add? (/q to quit)
+</span><span class='line'>  -&gt; szug
+</span><span class='line'> [+] Reading word-list /Letterpress.app/o/sz.txt
+</span><span class='line'> [+] Inserting word szug into word-list /Letterpress.app/o/sz.txt
+</span><span class='line'> [+] Successfully added word szug.  You can play it now!</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Let&#8217;s try again</h2>
+
+<p><img src="/assets/images/letterpress/after.png" alt="After" /></p>
+
+<p>You can find the app <a href="https://github.com/stateio/letterpress-lexicographer">here</a>.  Please enjoy responsibly.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/mveytsman">Max Veytsman</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-11-09T14:38:00-05:00" pubdate data-updated="true">Nov 9<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stateio.github.com/blog/2012/11/09/hacking-letterpress/" data-via="" data-counturl="http://stateio.github.com/blog/2012/11/09/hacking-letterpress/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/10/30/fun-with-vagrant/" title="Previous Post: Breaking in and out of Vagrant">&laquo; Breaking in and out of Vagrant</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>State Machinery</h1>
+  <p>We're a security and development consultancy based in Toronto, Canada.</p>
+  <p>We can help you identify and manage your information technology uncertainty and liability.</p>
+  <p>We also create web applications you'll love</p>
+</section>
+<section>
+  <h1>Contact Us</h1>
+  <p><a href="http://state.io">http://state.io</a></p>
+  <p>Or say hello@state.io</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/11/09/hacking-letterpress/">Hacking Letterpress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/30/fun-with-vagrant/">Breaking in and out of Vagrant</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/stateio">@stateio</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stateio',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - State Machienry -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
