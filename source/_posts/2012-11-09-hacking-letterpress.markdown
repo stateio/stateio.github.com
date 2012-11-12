@@ -20,13 +20,13 @@ combination of letters as a valid word.
 
 Inside your iPhone, the dictionary is spread across a
 series of text files located in `/<Letterpress
-folder>/Letterpress.app/o/[aa-zz].txt`. For instance, `aa.txt`
+folder>/Letterpress.app/o/[ab-zz].txt`. For instance, `ab.txt`
 contains all the words that begin with aa, and so on and so forth.
 
-Howver, digging around a bunch of text files is no fun, and so I decided to
+However, digging around a bunch of text files is no fun, and so I decided to
 write a tool to help me out.
 
-<h2>Automating Letterpress cheating</h2>
+## Automating Letterpress cheating
 
 First of all, it's a common misconception that you need to jailbreak a
 phone in order to access an individual app's files. 
@@ -46,7 +46,7 @@ So, I wrote a ruby gem that acts as an adapter for
 libimobiledevice and exposes some of the API calls in an object-oriented way. It's available on github as
 [imobiledevice](https://github.com/stateio/imobiledevice). So far, I have
 implemented only the small subset of libimobiledevice that I need,
-but I definitely welcome pull reqests.
+but I definitely welcome pull requests.
 
 Once I had a ruby wrapper for for libimobiledevice, it was simple to
 write an app that adds arbitrary words to the Letterpress dictionary.
