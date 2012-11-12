@@ -4,7 +4,7 @@ title: "Breaking in and out of Vagrant"
 date: 2012-10-30 00:32
 comments: true
 categories: 
-author: Max Veytsman
+author: [Max Veytsman](https://twitter.com/mveytsman)
 meta: true
 ---
 
