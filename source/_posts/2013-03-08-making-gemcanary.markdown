@@ -29,7 +29,7 @@ So, we decided to automate it.
 
 [Gemcanary](https://gemcanary.com) will read your Gemfile.lock and notify you if any of your app's dependencies become vulnerable.
 
-Given that we're a new consultancy, we found ourselves with some time between client projects and just went full blast for two of weeks. It was a lot of fun to work on. Although not every itch is worth investing this much time into, building an app you intend strangers to depend on is a very humbling and educational experience. 
+Given that we're a new consultancy, we found ourselves with some time between client projects and just went full blast for two weeks. It was a lot of fun to work on. Although not every itch is worth investing this much time into, building an app you intend strangers to depend on is a very humbling and educational experience. 
 
 There's a more lot to be said about building apps on Github's API, scratching itches and fixing the Ruby security process &mdash; which, through [Rubysec](http://rubysec.github.com) we're trying to be a part of &mdash; and this is something we'll be exploring more of over the next few weeks.
 
