@@ -3,7 +3,7 @@ layout: post
 title: "Breaking in and out of Vagrant"
 date: 2012-10-30 00:32
 comments: true
-categories: 
+categories: security virtualization
 author: <a href="http://twitter.com/mveytsman">Max Veytsman</a>
 meta: true
 ---

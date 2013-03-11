@@ -3,7 +3,7 @@ layout: post
 title: "Hacking Letterpress"
 date: 2012-11-09 14:38
 comments: true
-categories: 
+categories: security iPhone
 author: <a href="http://twitter.com/mveytsman">Max Veytsman</a>
 ---
 

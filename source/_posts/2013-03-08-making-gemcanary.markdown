@@ -3,7 +3,7 @@ layout: post
 title: "What an MVP looks like: making gemcanary"
 date: 2013-03-08 00:40
 comments: true
-categories: 
+categories: meta development
 author: <a href="http://twitter.com/phillmv">Phillip Mendonça-Vieira</a>
 meta: true
 ---
