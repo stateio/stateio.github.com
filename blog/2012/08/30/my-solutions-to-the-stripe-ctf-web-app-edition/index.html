@@ -1,289 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Finite State]]></title>
-  <link href="http://stateio.github.com/atom.xml" rel="self"/>
-  <link href="http://stateio.github.com/"/>
-  <updated>2013-03-10T21:59:47-04:00</updated>
-  <id>http://stateio.github.com/</id>
-  <author>
-    <name><![CDATA[State Machinery]]></name>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My solutions to the Stripe CTF (web app edition) - Finite State</title>
+  <meta name="author" content="State Machinery">
+
+  
+  <meta name="description" content="Stripe recently ran a CTF focused on web application hacking. It ended yesterday, and I decided to write up my solutions. If you have any questions &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stateio.github.com/blog/2012/08/30/my-solutions-to-the-stripe-ctf-web-app-edition/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Finite State" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36268423-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body  >
+  <header role="banner">  <h1><a href="/">Finite State</a></h1>
+  
+
+</header>
+  <nav role="navigation">  
+<ul class="main-navigation">
+  <li><a href="http://state.io">State Machinery</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
     
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+      <h1 class="entry-title">My Solutions to the Stripe CTF (Web App Edition)</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/mveytsman">Max Veytsman</a></span></span>
+
+        
+
+
+
+
+
+
+
 
   
-  <entry>
-    <title type="html"><![CDATA[What an MVP looks like: making gemcanary]]></title>
-    <link href="http://stateio.github.com/blog/2013/03/08/making-gemcanary/"/>
-    <updated>2013-03-08T00:40:00-05:00</updated>
-    <id>http://stateio.github.com/blog/2013/03/08/making-gemcanary</id>
-    <content type="html"><![CDATA[<p>Here at <a href="http://state.io">State Machinery</a> we&#8217;re big fans of <a href="https://github.com/mroth/lolcommits">lolcommits</a> and we set it up on every project we work on. <a href="https://gemcanary.com">Gemcanary</a> was no different:</p>
-
-<iframe width="480" height="360" src="http://www.youtube.com/embed/R7pgAlCB3kU?rel=0" frameborder="0" allowfullscreen></iframe>
 
 
-<h2>Scratching an itch</h2>
 
-<p>The Ruby community was recently besieged by a series of devastating security vulnerabilities. These things happen. It&#8217;s hard to get everything right all the time and, if anything, for an ecosystem everyone loves to hate it&#8217;s a little surprising it took this long for something this serious to emerge.</p>
-
-<p>We sighed and scrambled to update our apps in production.</p>
-
-<p>However, a couple of weeks later while debugging my personal server, I noticed that I had left a couple of toy apps unattended. I had totally forgotten about them, on account of the fact that I hadn&#8217;t touched them in well over a year. No one had visited these urls in forever and nothing important was stored on that machine, but we wiped the server as part of our standard operating procedure.</p>
-
-<p>After spending a couple of hours putting everything that wasn&#8217;t in a chef script back together, I felt really annoyed. The whole security process as we experience it <em>sucks</em>.</p>
-
-<p>It&#8217;s actually really hard to keep up to date with every single piece of ruby-related news. If you work on a small team, depending on your social network to communicate critical patches totally falls apart if you ever plan on spending time away from the computer. And once you&#8217;ve been a web developer for a few years you end up collecting a lot of apps, repositories and deployments you&#8217;re responsible for.</p>
-
-<p>So, we decided to automate it.</p>
-
-<p><a href="https://gemcanary.com">Gemcanary</a> will read your Gemfile.lock and notify you if any of your app&#8217;s dependencies become vulnerable.</p>
-
-<p>Given that we&#8217;re a new consultancy, we found ourselves with some time between client projects and just went full blast for two weeks. It was a lot of fun to work on. Although not every itch is worth investing this much time into, building an app you intend strangers to depend on is a very humbling and educational experience.</p>
-
-<p>There&#8217;s a more lot to be said about building apps on Github&#8217;s API, scratching itches and fixing the Ruby security process &mdash; which, through <a href="http://rubysec.github.com">Rubysec</a> we&#8217;re trying to be a part of &mdash; and this is something we&#8217;ll be exploring more of over the next few weeks.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hacking Letterpress]]></title>
-    <link href="http://stateio.github.com/blog/2012/11/09/hacking-letterpress/"/>
-    <updated>2012-11-09T14:38:00-05:00</updated>
-    <id>http://stateio.github.com/blog/2012/11/09/hacking-letterpress</id>
-    <content type="html"><![CDATA[<p><a href="http://www.atebits.com/letterpress/">Letterpress</a> is an iOS game
-that came out a few weeks ago and immediately became popular enough to <a href="https://twitter.com/marcoarment/statuses/261337316268859392">take down Apple&#8217;s GameCenter</a>. It&#8217;s a cross between <a href="http://daringfireball.net/linked/2012/10/24/letterpress">Scrabble and Go</a>. The game is played on a board made out of 25 letters and players take turns building words in order to capture the letters they use.</p>
-
-<p>I was hopelessly addicted to Letterpress until I figured out how to win consistently.</p>
-
-<p><img src="http://stateio.github.com/assets/images/letterpress/winning.png" alt="winning" /></p>
-
-<p>As it turns out, Letterpress&#8217;s dictionary and word check is stored and performed locally on your
-phone. By simply adding words to Letterpress&#8217;s dictionary, you can register any
-combination of letters as a valid word.</p>
-
-<p>Inside your iPhone, the dictionary is spread across a
-series of text files located in <code>/&lt;Letterpress
-folder&gt;/Letterpress.app/o/[ab-zz].txt</code>. For instance, <code>ab.txt</code>
-contains all the words that begin with aa, and so on and so forth.</p>
-
-<p>However, digging around a bunch of text files is no fun, and so I decided to
-write a tool to help me out.</p>
-
-<p>By the way, the author of Letterpress does <a href="https://twitter.com/lorenb/status/261617107656138752">know</a> about people cheating this way.</p>
-
-<h2>Automating Letterpress cheating</h2>
-
-<p>First of all, it&#8217;s a common misconception that you need to jailbreak a
-phone in order to access an individual app&#8217;s files.
-Tools like
-<a href="http://www.macroplant.com/iexplorer/">iExplorer</a> allow you to, among
-other things, access an app&#8217;s directory and modify the files there on any iPhone. (It&#8217;s my understanding that they&#8217;re using undocumented calls in the library iTunes uses for syncing in order to
-pull this off.)</p>
-
-<p>Since I didn&#8217;t want to rely on a third party paid tool like iExplorer,
-I decided to use libimobiledevice.
-<a href="http://www.libimobiledevice.org/">libimobiledevice</a>. Libimobiledevice
-is an open-source library for talking to iDevices over USB. It&#8217;s capable of providing
-access to the filesystem, the iPhone internals, and much more.
-Libimobiledevice supports both OS X and Linux.</p>
-
-<p>So, I wrote a ruby gem that acts as an adapter for
-libimobiledevice and exposes some of the API calls in an object-oriented way. It&#8217;s available on github as
-<a href="https://github.com/stateio/imobiledevice">imobiledevice</a>. So far, I have
-implemented only the small subset of libimobiledevice that I need,
-but I definitely welcome pull requests.</p>
-
-<p>Once I had a ruby wrapper for for libimobiledevice, it was simple to
-write an app that adds arbitrary words to the Letterpress dictionary.
-I call it
-<a href="https://github.com/stateio/letterpress-lexicographer">letterpress-lexicographer</a>.
-Here&#8217;s how it works:</p>
-
-<h2>Is this a word?</h2>
-
-<p><img src="http://stateio.github.com/assets/images/letterpress/before.png" alt="Before" /></p>
-
-<h2>Shucks!</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>./letterpress-lexicographer.rb
-</span><span class='line'> [*] Connecting to iDevice
-</span><span class='line'> [*] Connected to iDevice. UDID:REDACTED
-</span><span class='line'> [*] Accessing Letterpress app
-</span><span class='line'> [*] Accessed Letterpress app
-</span><span class='line'> [?] What word would you like to add? (/q to quit)
-</span><span class='line'>  -&gt; szug
-</span><span class='line'> [+] Reading word-list /Letterpress.app/o/sz.txt
-</span><span class='line'> [+] Inserting word szug into word-list /Letterpress.app/o/sz.txt
-</span><span class='line'> [+] Successfully added word szug.  You can play it now!</span></code></pre></td></tr></table></div></figure>
+<time datetime="2012-08-30T17:55:00-04:00" pubdate data-updated="true">Aug 30<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
 
 
-<h2>Let&#8217;s try again</h2>
-
-<p><img src="http://stateio.github.com/assets/images/letterpress/after.png" alt="After" /></p>
-
-<p>You can find the app <a href="https://github.com/stateio/letterpress-lexicographer">here</a>.  Please enjoy responsibly.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Breaking in and out of Vagrant]]></title>
-    <link href="http://stateio.github.com/blog/2012/10/30/breaking-in-and-out-of-vagrant/"/>
-    <updated>2012-10-30T00:32:00-04:00</updated>
-    <id>http://stateio.github.com/blog/2012/10/30/breaking-in-and-out-of-vagrant</id>
-    <content type="html"><![CDATA[<p><a href="http://vagrantup.com/">Vagrant</a> is a great tool that allows you to
-easily spawn and configure lightweight VMs to use as development
-environments. Vagrant provides base installs of several flavours of
-Linux, and takes care of setting up networking and shared folders for
-you.</p>
-
-<p>Vagrant is really useful for managing your development environment,
-and I highly recommend it. If you&#8217;re doing a lot of development,
-you might need to be running all kinds of application and database
-servers on your machine, and it&#8217;s probably a much better idea to run
-them in a VM rather than on your host machine.</p>
-
-<p>Unfortunately, if you expose your Vagrant VMs (or any development VMs
-really) to the outside world, what seemed like a secure best practice
-can end up being very insecure. This isn&#8217;t a novel concept, but the
-disposable nature of virtual machines makes it easy to forget to think
-about their security. A common attitude is &#8220;What&#8217;s the worst that can
-happen if someone gets on my development VM? I blow away and
-re-generate this VM every half hour anyway, and aren&#8217;t VM escape bugs
-rare and esoteric anyway?&#8221;</p>
-
-<p>I&#8217;m going to show a really simple way to break out of Vagrant VMs, but first,</p>
-
-<h2>How Vagrant is Used </h2>
-
-<p>Vagrant VMs are designed to be lightweight and built per-project. The
-VMs around a concept of &#8220;base boxes,&#8221; which are base installs of
-various flavours of linux. You initialize a Vagrant VM from a base
-box, and then can install your desired environment.</p>
-
-<p>By default, Vagrant shares your project folder
-with the VM at <code>/vagrant/</code>. So, a usual workflow would be:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>host: <span class="nv">$ </span><span class="nb">cd</span> /my/project/here/
-</span><span class='line'>host: <span class="nv">$ </span><span class="c">#we&#39;re going to base our VM on an Ubuntu Lucid 32bit base box </span>
-</span><span class='line'>host: <span class="nv">$ </span>vagrant box add lucid32 http://files.vagrantup.com/lucid32.box
-</span><span class='line'>host: <span class="nv">$ </span>vagrant init lucid32
-</span><span class='line'>host: <span class="nv">$ </span>vagrant up
-</span><span class='line'>host: <span class="nv">$ </span>vagrant ssh
-</span><span class='line'>  vm: <span class="nv">$ </span><span class="c">#now we are on the VM</span>
-</span><span class='line'>  vm: <span class="nv">$ </span><span class="nb">cd</span> /vagrant/
-</span><span class='line'>  vm: <span class="nv">$ </span>run_my_server
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can then edit the code on your host machine, and use the VM to run an applciation and database server.</p>
-
-<h2>Bridging the Network</h2>
-
-<p>Just like in any virtual machine, you can configure your Vagrant VMs&#8217;
-networking to run in host-only mode or in bridged mode. In host-only
-mode, a VM uses a virtual network adapter and is basically only
-accessible from the host. In bridged mode, the VM bridges through the
-network adapter of the host machine, and actually connects to the same
-network as the host. So, for example, if you bridge a VM to a wifi
-device, the VM will have a different IP address on the same wifi
-network as the host. And of course, you&#8217;ll be able to access the VM
-from other machines on the wifi network. In host-only mode, the VM is
-not accessible from outside the host. As they say, NAT is the poor
-man&#8217;s firewall.</p>
-
-<p>The Vagrant
-<a href="http://vagrantup.com/v1/docs/bridged_networking.html">documentation</a>
-doesn&#8217;t mention any security risks of running development VMs in
-bridged mode. There&#8217;s a promising alert box, but the contents are:</p>
-
-<blockquote><h4>Not All Networks Work!</h4>
-
-<p>Some networks will not work properly with bridged networking. Specifically, I&#8217;ve found that hotel networks, airport networks, and generally public-shared networks have configurations in place such that bridging does not work.
-You can tell if the bridged networking worked successfully by seeing if the virtual machine was able to get an IP address on the bridged adapter.</p></blockquote>
-
-<p>The author doesn&#8217;t seem to see any intrinsic problem with running Vagrant VMs in hotels, airports, and coffee-shops outside of it sometimes not working.</p>
-
-<h2>Breaking In</h2>
-
-<p>So after scanning the airport wifi, you found someone running a
-Vagrant VM in bridged mode. How do you get in? First of all, they are
-most like likely doing some kind of development on it, so the VM is
-probably running an app that&#8217;s not very secured. There&#8217;s also a good
-chance that this VM is running a database and maybe CouchDB or Redis.
-One of these is probably using guessable credentials (this is the
-development environment after all), or the app itself might have an
-exploitable bug.</p>
-
-<p>All of the above sounds too hard. Remember the <code>vagrant ssh</code> command
-above? Well, it has to get in somehow.</p>
-
-<p>On all of the VMs built from official base boxes, like <code>lucid32</code> the
-credentials are <code>vagrant : vagrant</code>. The instructions for developers
-building new base boxes actually say not to use password-based SSH
-logins. Instead, anyone building a base box for public consumption is
-using these <a href="https://github.com/mitchellh/vagrant/tree/master/keys/">SSH keys</a> for the
-<code>vagrant</code> user.</p>
-
-<p>Either way, any Vagrant VM built from a public base box (read: almost
-all of them) is going to be accessible with either <code>vagrant : vagrant</code>
-or the SSH keys above.</p>
-
-<h2>Breaking Out </h2>
-
-<p>Breaking into a development VM isn&#8217;t a big deal on it&#8217;s own,
-especially since the vagrant workflow encourages blowing-away and
-rebuilding the VM often. What you really want is code execution on the
-host, and it&#8217;s going to be surprisingly easy to do that.</p>
-
-<p>The Vagrant workflow encourages you to edit your code outside the VM.
-That&#8217;s why Vagrant helpfully shares the project directory as
-<code>/vagrant/</code> in the VM. It&#8217;s a safe assumption that anyone using
-Vagrant for development is using some kind of version control, and if
-that&#8217;s the case, they are probably going to be interacting with it on
-the host machine (where they edit the code). This is how we&#8217;ll get
-execution on the host.</p>
-
-<p>For simplicity, I&#8217;m going to focus on Git, but this trick should work
-for any other commonly used VCS. Hooks are little shell scripts that
-run after you commit a certain action. For instance, a <code>post-commit</code>
-hook is a shell script that git will execute every time a commit is
-completed. Hooks are places in <code>.git/hooks/HOOK-NAME</code>.</p>
-
-<p>So if I get on a Vagrant VM and want to escape into the host, all I
-have to do is create a post-commit hook. I simply put evil things in
-<code>/vagrant/.git/hooks/post-commit</code> and wait for the user to commit some
-code. Since the <code>/vagrant/</code> directory is mounted from the host, my
-hook will persist even if the user destroys the VM.</p>
-
-<p>If you liked this, you should follow me on <a href="https://twitter.com/mveytsman">twitter</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My solutions to the Stripe CTF (web app edition)]]></title>
-    <link href="http://stateio.github.com/blog/2012/08/30/my-solutions-to-the-stripe-ctf-web-app-edition/"/>
-    <updated>2012-08-30T17:55:00-04:00</updated>
-    <id>http://stateio.github.com/blog/2012/08/30/my-solutions-to-the-stripe-ctf-web-app-edition</id>
-    <content type="html"><![CDATA[<p>Stripe recently ran a <a href="https://stripe-ctf.com">CTF</a> focused on web application hacking.  It ended yesterday, and I decided to write up my solutions.  If you have any questions or find a bug in my solutions, you can reach me at <strong>max [at] state.io</strong>.</p>
+<div class="entry-content"><p>Stripe recently ran a <a href="https://stripe-ctf.com">CTF</a> focused on web application hacking.  It ended yesterday, and I decided to write up my solutions.  If you have any questions or find a bug in my solutions, you can reach me at <strong>max [at] state.io</strong>.</p>
 
 <p>First of all, I had an great time solving these challenges.  Big thanks to the Stripe team for creating such a fun game. I hope to see more CTFs from them in the future.</p>
 
@@ -306,7 +120,7 @@ hook will persist even if the user destroys the VM.</p>
 
 <p>By querying the site for secrets in the namespace of <code>%</code>, you cause the SQL query that is executed to evaluate to <code>SELECT * FROM secrets WHERE key LIKE %.%</code> which of course will spit out every secret stored in every namespace, including the password.</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level0-solved.png" alt="Level 0 Solved" /></p>
+<p><img src="/assets/images/stripe-ctf/level0-solved.png" alt="Level 0 Solved" /></p>
 
 <h2>Level 1</h2>
 
@@ -351,13 +165,13 @@ hook will persist even if the user destroys the VM.</p>
 
 <p>There are a lot of ways to do this, but I found it most natural to choose a filename that doesn&#8217;t exist, and supply an empty string as my guess.  Because the script doesn&#8217;t really deal with errors, this will result in a correct attempt.  My final querystring was <code>attempt=&amp;filename=DOESNOTEXIT</code></p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level1-solved.png" alt="Level 1 Solved" /></p>
+<p><img src="/assets/images/stripe-ctf/level1-solved.png" alt="Level 1 Solved" /></p>
 
 <h2>Level 2</h2>
 
 <p>Level 2 presents you with a &#8220;social network,&#8221; where you have the opportunity to upload your avatar image.  The password for the next level is stored in a text file on the server.  As it turns out, you can upload any kind of file you want, not just images.  And this includes PHP files, which the server will happily execute when you navigate to the URL of the uploaded script.  You can even get a handy directory listing:</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level2-directory_listing.png" alt="Level 2 Directory Listing" /></p>
+<p><img src="/assets/images/stripe-ctf/level2-directory_listing.png" alt="Level 2 Directory Listing" /></p>
 
 <p>Above you can see a bunch of files that I uploaded, and even a false attempt at the challenge.  Having a place to dump scripts and other files is going to come in handy for the later challenges.</p>
 
@@ -421,7 +235,7 @@ hook will persist even if the user destroys the VM.</p>
 
 <p>Level 4 is a karma trading game.  You register as a user, and then can transfer karma to other users in the game.  To keep things honest, if a user transfers you karma, you also get to see their password.</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level4.png" alt="Level 4" /></p>
+<p><img src="/assets/images/stripe-ctf/level4.png" alt="Level 4" /></p>
 
 <p>The user karma_fountain&#8217;s password is the password to the next level, so if karma_fountain gives you karma, you also get the password to the next level.</p>
 
@@ -431,7 +245,7 @@ hook will persist even if the user destroys the VM.</p>
 
 <p>Transferring karma to karma_trader from attacker completes the challenge:</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level4-solved.png" alt="Level 4 Solved" /></p>
+<p><img src="/assets/images/stripe-ctf/level4-solved.png" alt="Level 4 Solved" /></p>
 
 <h2>Level 5</h2>
 
@@ -471,7 +285,7 @@ hook will persist even if the user destroys the VM.</p>
 
 <p>As a sidenote, after solving this challenge the first time, when I came back to gather screenshots, I found that I could authenticate to the level 5 domain, but was no longer shown the password:</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level5-solved.png" alt="Level 5 Solved?" /></p>
+<p><img src="/assets/images/stripe-ctf/level5-solved.png" alt="Level 5 Solved?" /></p>
 
 <p>If anyone knows why I didn&#8217;t see a password the second time around, please tell me!</p>
 
@@ -682,7 +496,7 @@ seeing what my password is.</p></blockquote>
 
 <p>And when the above is encoded with <code>String.fromCharCode</code> and put inside a <code>&lt;script&gt;</code> tag, the target user will post their password when viewing our post:</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level6-solved.png" alt="Level 6 Solved" /></p>
+<p><img src="/assets/images/stripe-ctf/level6-solved.png" alt="Level 6 Solved" /></p>
 
 <h2>Level 7</h2>
 
@@ -690,7 +504,7 @@ seeing what my password is.</p></blockquote>
 
 <p>An order is a post request with a signature, and you can view your previous orders and the orders of other users by navigating to &#8220;/logs/USERID&#8221;.</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level7-orders-1.png" alt="Level 7 Orders" /></p>
+<p><img src="/assets/images/stripe-ctf/level7-orders-1.png" alt="Level 7 Orders" /></p>
 
 <p>This is an order log for another user.  We know that this user is a premium subscriber because they are ordering the Dream waffle which is a premium item like the Liège waffles we have to order.</p>
 
@@ -715,7 +529,7 @@ seeing what my password is.</p></blockquote>
 
 <p>I found a handy script to perform a SHA1 padding attack <a href="http://www.vnsecurity.net/2010/03/codegate_challenge15_sha1_padding_attack/">here</a>.</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level7-padding.png" alt="Level 7 SHA1 Padding Attack" /></p>
+<p><img src="/assets/images/stripe-ctf/level7-padding.png" alt="Level 7 SHA1 Padding Attack" /></p>
 
 <p>Running it I was able to generate a new message and signature, and submitting that allowed me to order the Liège Waffle.</p>
 
@@ -938,7 +752,7 @@ seeing what my password is.</p></blockquote>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/level8-shell.png" alt="Level 8 Shell" /></p>
+<p><img src="/assets/images/stripe-ctf/level8-shell.png" alt="Level 8 Shell" /></p>
 
 <p>To brute force the password chunk by chunk, we send two requests with the same guess to PasswordDB and look at the difference in source ports between responses to our webhook.  If the difference when guessing the first chunk is 3, then PasswordDB made 2 requests between responding to us, and thus queried the 2nd chunk server.  Likewise if the difference when guessing the 2nd chunk is 4, and guessing the 3rd chunk is 5.  I found that due to what&#8217;s probably other users on the same challenge, I would sometimes get source port differences that were wildly off.  I solved this sub optimally: any time that I have a source port difference greater than what I expect I wait 5 seconds and try again.  If I keep getting source port differences greater than the expected 5 times in a row, I probably correctly guessed a chunk.  This is a very suboptimal way to do it, and my script took a couple of hours to finish.</p>
 
@@ -1090,8 +904,150 @@ seeing what my password is.</p></blockquote>
 
 <p>And there you have it.</p>
 
-<p><img src="http://stateio.github.com/assets/images/stripe-ctf/the-end.png" alt="The End" /></p>
-]]></content>
-  </entry>
+<p><img src="/assets/images/stripe-ctf/the-end.png" alt="The End" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-</feed>
+
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/mveytsman">Max Veytsman</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-08-30T17:55:00-04:00" pubdate data-updated="true">Aug 30<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ctfs/'>CTFs</a>, <a class='category' href='/blog/categories/security/'>security</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/10/30/breaking-in-and-out-of-vagrant/" title="Next Post: Breaking in and out of Vagrant">Breaking in and out of Vagrant &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>State Machinery</h1>
+  <p>We're a security and development consultancy based in Toronto, Canada.</p>
+  <p>We can help you identify and manage your information technology uncertainty and liability.</p>
+  <p>We also create web applications you'll love</p>
+  <p>Check out at <a href="http://state.io">http://state.io</a> or say<br/>hello@state.io</p>
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/08/making-gemcanary/">What an MVP looks like: making gemcanary</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/09/hacking-letterpress/">Hacking Letterpress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/30/breaking-in-and-out-of-vagrant/">Breaking in and out of Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/30/my-solutions-to-the-stripe-ctf-web-app-edition/">My solutions to the Stripe CTF (web app edition)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/stateio">@stateio</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stateio',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - State Machinery -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

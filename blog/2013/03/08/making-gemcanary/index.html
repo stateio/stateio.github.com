@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Finite State</title>
+  <title>What an MVP looks like: making gemcanary - Finite State</title>
   <meta name="author" content="State Machinery">
 
   
-  <meta name="description" content="Page not found Sorry about that! Unfortunately the page you were looking for could not be found. It might have been removed, lost or never existed. &hellip;">
+  <meta name="description" content="Here at State Machinery we&#8217;re big fans of lolcommits and we set it up on every project we work on. Gemcanary was no different: Scratching an &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://stateio.github.com/404.html">
+  <link rel="canonical" href="http://stateio.github.com/blog/2013/03/08/making-gemcanary/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -64,42 +64,112 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-  <h1 class="entry-title">Page not found</h1>
-  <p class="meta">Sorry about that!</p>
-</header>
-
-<p>
-  Unfortunately the page you were looking for could not be found. It might have
-  been removed, lost or never existed. You could try and find it using the
-  <script>
-    var arrURL = document.URL.split("/");
-    var arrParams = arrURL[3].split("?");
-    var searchParam = arrParams[0].substr(0, arrParams[0].lastIndexOf("."));
     
-    document.write('<a href="?q=site:stateio.github.com ' + searchParam + '">search</a>')
-  </script>
-  <noscript><a href="?q=site%3Astateio.github.com">search</a></noscript>
-  box (top right corner), browse the
-  <a href="/blog/archives">archives</a> or go to the
-  <a href="/">frontpage</a>.
-</p>
+      <h1 class="entry-title">What an MVP Looks Like: Making Gemcanary</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/phillmv">Phillip Mendonça-Vieira</a></span></span>
+
+        
+
+
+
+
+
+
+
 
   
-    <footer>
+
+
+
+<time datetime="2013-03-08T00:40:00-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Here at <a href="http://state.io">State Machinery</a> we&#8217;re big fans of <a href="https://github.com/mroth/lolcommits">lolcommits</a> and we set it up on every project we work on. <a href="https://gemcanary.com">Gemcanary</a> was no different:</p>
+
+<iframe width="480" height="360" src="http://www.youtube.com/embed/R7pgAlCB3kU?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<h2>Scratching an itch</h2>
+
+<p>The Ruby community was recently besieged by a series of devastating security vulnerabilities. These things happen. It&#8217;s hard to get everything right all the time and, if anything, for an ecosystem everyone loves to hate it&#8217;s a little surprising it took this long for something this serious to emerge.</p>
+
+<p>We sighed and scrambled to update our apps in production.</p>
+
+<p>However, a couple of weeks later while debugging my personal server, I noticed that I had left a couple of toy apps unattended. I had totally forgotten about them, on account of the fact that I hadn&#8217;t touched them in well over a year. No one had visited these urls in forever and nothing important was stored on that machine, but we wiped the server as part of our standard operating procedure.</p>
+
+<p>After spending a couple of hours putting everything that wasn&#8217;t in a chef script back together, I felt really annoyed. The whole security process as we experience it <em>sucks</em>.</p>
+
+<p>It&#8217;s actually really hard to keep up to date with every single piece of ruby-related news. If you work on a small team, depending on your social network to communicate critical patches totally falls apart if you ever plan on spending time away from the computer. And once you&#8217;ve been a web developer for a few years you end up collecting a lot of apps, repositories and deployments you&#8217;re responsible for.</p>
+
+<p>So, we decided to automate it.</p>
+
+<p><a href="https://gemcanary.com">Gemcanary</a> will read your Gemfile.lock and notify you if any of your app&#8217;s dependencies become vulnerable.</p>
+
+<p>Given that we&#8217;re a new consultancy, we found ourselves with some time between client projects and just went full blast for two weeks. It was a lot of fun to work on. Although not every itch is worth investing this much time into, building an app you intend strangers to depend on is a very humbling and educational experience.</p>
+
+<p>There&#8217;s a more lot to be said about building apps on Github&#8217;s API, scratching itches and fixing the Ruby security process &mdash; which, through <a href="http://rubysec.github.com">Rubysec</a> we&#8217;re trying to be a part of &mdash; and this is something we&#8217;ll be exploring more of over the next few weeks.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
+  
+
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/phillmv">Phillip Mendonça-Vieira</a></span></span>
+
       
-        <div class="sharing">
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2013-03-08T00:40:00-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/meta/'>meta</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
   
   
   
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+        <a class="basic-alignment left" href="/blog/2012/11/09/hacking-letterpress/" title="Previous Post: Hacking Letterpress">&laquo; Hacking Letterpress</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
 </div>

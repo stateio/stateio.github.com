@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: iPhone | Finite State]]></title>
+  <link href="http://stateio.github.com/blog/categories/iphone/atom.xml" rel="self"/>
+  <link href="http://stateio.github.com/"/>
+  <updated>2013-03-10T21:59:47-04:00</updated>
+  <id>http://stateio.github.com/</id>
+  <author>
+    <name><![CDATA[State Machinery]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hacking Letterpress]]></title>
+    <link href="http://stateio.github.com/blog/2012/11/09/hacking-letterpress/"/>
+    <updated>2012-11-09T14:38:00-05:00</updated>
+    <id>http://stateio.github.com/blog/2012/11/09/hacking-letterpress</id>
+    <content type="html"><![CDATA[<p><a href="http://www.atebits.com/letterpress/">Letterpress</a> is an iOS game
+that came out a few weeks ago and immediately became popular enough to <a href="https://twitter.com/marcoarment/statuses/261337316268859392">take down Apple's GameCenter</a>. It's a cross between <a href="http://daringfireball.net/linked/2012/10/24/letterpress">Scrabble and Go</a>. The game is played on a board made out of 25 letters and players take turns building words in order to capture the letters they use.</p>
+
+<p>I was hopelessly addicted to Letterpress until I figured out how to win consistently.</p>
+
+<p><img src="/assets/images/letterpress/winning.png" alt="winning" /></p>
+
+<p>As it turns out, Letterpress's dictionary and word check is stored and performed locally on your
+phone. By simply adding words to Letterpress's dictionary, you can register any
+combination of letters as a valid word.</p>
+
+<p>Inside your iPhone, the dictionary is spread across a
+series of text files located in <code>/&lt;Letterpress
+folder&gt;/Letterpress.app/o/[ab-zz].txt</code>. For instance, <code>ab.txt</code>
+contains all the words that begin with aa, and so on and so forth.</p>
+
+<p>However, digging around a bunch of text files is no fun, and so I decided to
+write a tool to help me out.</p>
+
+<p>By the way, the author of Letterpress does <a href="https://twitter.com/lorenb/status/261617107656138752">know</a> about people cheating this way.</p>
+
+<h2>Automating Letterpress cheating</h2>
+
+<p>First of all, it's a common misconception that you need to jailbreak a
+phone in order to access an individual app's files.
+Tools like
+<a href="http://www.macroplant.com/iexplorer/">iExplorer</a> allow you to, among
+other things, access an app's directory and modify the files there on any iPhone. (It's my understanding that they're using undocumented calls in the library iTunes uses for syncing in order to
+pull this off.)</p>
+
+<p>Since I didn't want to rely on a third party paid tool like iExplorer,
+I decided to use libimobiledevice.
+<a href="http://www.libimobiledevice.org/">libimobiledevice</a>. Libimobiledevice
+is an open-source library for talking to iDevices over USB. It's capable of providing
+access to the filesystem, the iPhone internals, and much more.
+Libimobiledevice supports both OS X and Linux.</p>
+
+<p>So, I wrote a ruby gem that acts as an adapter for
+libimobiledevice and exposes some of the API calls in an object-oriented way. It's available on github as
+<a href="https://github.com/stateio/imobiledevice">imobiledevice</a>. So far, I have
+implemented only the small subset of libimobiledevice that I need,
+but I definitely welcome pull requests.</p>
+
+<p>Once I had a ruby wrapper for for libimobiledevice, it was simple to
+write an app that adds arbitrary words to the Letterpress dictionary.
+I call it
+<a href="https://github.com/stateio/letterpress-lexicographer">letterpress-lexicographer</a>.
+Here's how it works:</p>
+
+<h2>Is this a word?</h2>
+
+<p><img src="/assets/images/letterpress/before.png" alt="Before" /></p>
+
+<h2>Shucks!</h2>
+
+<p><code>
+./letterpress-lexicographer.rb
+ [*] Connecting to iDevice
+ [*] Connected to iDevice. UDID:REDACTED
+ [*] Accessing Letterpress app
+ [*] Accessed Letterpress app
+ [?] What word would you like to add? (/q to quit)
+  -&gt; szug
+ [+] Reading word-list /Letterpress.app/o/sz.txt
+ [+] Inserting word szug into word-list /Letterpress.app/o/sz.txt
+ [+] Successfully added word szug.  You can play it now!
+</code></p>
+
+<h2>Let's try again</h2>
+
+<p><img src="/assets/images/letterpress/after.png" alt="After" /></p>
+
+<p>You can find the app <a href="https://github.com/stateio/letterpress-lexicographer">here</a>.  Please enjoy responsibly.</p>
+]]></content>
+  </entry>
+  
+</feed>

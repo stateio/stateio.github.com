@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: development | Finite State]]></title>
+  <link href="http://stateio.github.com/blog/categories/development/atom.xml" rel="self"/>
+  <link href="http://stateio.github.com/"/>
+  <updated>2013-03-10T21:59:47-04:00</updated>
+  <id>http://stateio.github.com/</id>
+  <author>
+    <name><![CDATA[State Machinery]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[What an MVP looks like: making gemcanary]]></title>
+    <link href="http://stateio.github.com/blog/2013/03/08/making-gemcanary/"/>
+    <updated>2013-03-08T00:40:00-05:00</updated>
+    <id>http://stateio.github.com/blog/2013/03/08/making-gemcanary</id>
+    <content type="html"><![CDATA[<p>Here at <a href="http://state.io">State Machinery</a> we're big fans of <a href="https://github.com/mroth/lolcommits">lolcommits</a> and we set it up on every project we work on. <a href="https://gemcanary.com">Gemcanary</a> was no different:</p>
+
+<iframe width="480" height="360" src="http://www.youtube.com/embed/R7pgAlCB3kU?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+<h2>Scratching an itch</h2>
+
+<p>The Ruby community was recently besieged by a series of devastating security vulnerabilities. These things happen. It's hard to get everything right all the time and, if anything, for an ecosystem everyone loves to hate it's a little surprising it took this long for something this serious to emerge.</p>
+
+<p>We sighed and scrambled to update our apps in production.</p>
+
+<p>However, a couple of weeks later while debugging my personal server, I noticed that I had left a couple of toy apps unattended. I had totally forgotten about them, on account of the fact that I hadn't touched them in well over a year. No one had visited these urls in forever and nothing important was stored on that machine, but we wiped the server as part of our standard operating procedure.</p>
+
+<p>After spending a couple of hours putting everything that wasn't in a chef script back together, I felt really annoyed. The whole security process as we experience it <em>sucks</em>.</p>
+
+<p>It's actually really hard to keep up to date with every single piece of ruby-related news. If you work on a small team, depending on your social network to communicate critical patches totally falls apart if you ever plan on spending time away from the computer. And once you've been a web developer for a few years you end up collecting a lot of apps, repositories and deployments you're responsible for.</p>
+
+<p>So, we decided to automate it.</p>
+
+<p><a href="https://gemcanary.com">Gemcanary</a> will read your Gemfile.lock and notify you if any of your app's dependencies become vulnerable.</p>
+
+<p>Given that we're a new consultancy, we found ourselves with some time between client projects and just went full blast for two weeks. It was a lot of fun to work on. Although not every itch is worth investing this much time into, building an app you intend strangers to depend on is a very humbling and educational experience.</p>
+
+<p>There's a more lot to be said about building apps on Github's API, scratching itches and fixing the Ruby security process &mdash; which, through <a href="http://rubysec.github.com">Rubysec</a> we're trying to be a part of &mdash; and this is something we'll be exploring more of over the next few weeks.</p>
+]]></content>
+  </entry>
+  
+</feed>
