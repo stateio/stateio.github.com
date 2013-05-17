@@ -40,3 +40,10 @@ $nav-border-top: lighten($site-bg, 50) !default;
 $nav-border-bottom: $nav-border !default;
 $nav-border-left: $nav-border !default;
 $nav-border-right: #fff !default;
+
+.blatant-advertising {
+    width: 600px;
+    margin-left: 50px;
+    border: 1px dotted black;
+    padding: 10px;
+}
