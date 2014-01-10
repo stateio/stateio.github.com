@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>What an MVP looks like: making gemcanary - Finite State</title>
+  <title>Thoughts On Bsidesto - Finite State</title>
   <meta name="author" content="State Machinery">
 
   
-  <meta name="description" content="Here at State Machinery we&#8217;re big fans of lolcommits and we set it up on every project we work on. Gemcanary was no different: Scratching an &hellip;">
+  <meta name="description" content="Last month, I helped organize a security conference in Toronto called BsidesTO. I&#8217;ve attended and volunteered at my fair share of conferences, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://stateio.github.com/blog/2013/03/08/making-gemcanary/">
+  <link rel="canonical" href="http://stateio.github.com/blog/2013/11/30/thoughts-on-bsidesto/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -68,14 +68,14 @@
   
   <header>
     
-      <h1 class="entry-title">What an MVP Looks Like: Making Gemcanary</h1>
+      <h1 class="entry-title">Thoughts on Bsidesto</h1>
     
     
       <p class="meta">
         
   
 
-<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/phillmv">Phillip Mendonça-Vieira</a></span></span>
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/mveytsman">Max Veytsman</a></span></span>
 
         
 
@@ -90,37 +90,51 @@
 
 
 
-<time datetime="2013-03-08T00:40:00-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
+<time datetime="2013-11-30T12:00:00-05:00" pubdate data-updated="true">Nov 30<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Here at <a href="http://state.io">State Machinery</a> we&#8217;re big fans of <a href="https://github.com/mroth/lolcommits">lolcommits</a> and we set it up on every project we work on. <a href="https://gemcanary.com">Gemcanary</a> was no different:</p>
+<div class="entry-content"><p>Last month, I helped organize a security conference in Toronto called <a href="http://bsidesto.ca">BsidesTO</a>. I&#8217;ve attended and volunteered at my fair share of conferences, but this is the first time I&#8217;ve had an integral role in throwing and event of this scale.</p>
 
-<iframe width="480" height="360" src="http://www.youtube.com/embed/R7pgAlCB3kU?rel=0" frameborder="0" allowfullscreen></iframe>
+<p>One day, two floors, 14 speakers, and over 150 attendees. It was a blast. An exhausting blast.</p>
 
+<p><a href="http://www.securitybsides.com/w/page/12194156/FrontPage">Bsides</a>. is a brand for security conferences around the world.</p>
 
-<h2>Scratching an itch</h2>
+<blockquote><p>What is BSides?
+Each BSides is a community-driven framework for building events for and by information security community members.  The goal is to expand the spectrum of conversation beyond the traditional confines of space and time.  It creates opportunities for individuals to both present and participate in an intimate atmosphere that encourages collaboration. It is an intense event with discussions, demos, and interaction from participants. It is where conversations for the next-big-thing are happening.</p></blockquote>
 
-<p>The Ruby community was recently besieged by a series of devastating security vulnerabilities. These things happen. It&#8217;s hard to get everything right all the time and, if anything, for an ecosystem everyone loves to hate it&#8217;s a little surprising it took this long for something this serious to emerge.</p>
+<p>The Toronto security community had long wanted a Bsides of its own to compliment the larger <a href="http://sector.ca/">SecTor</a> conference. 2013 was the first year that things came together and a successful Bsides in Toronto was launched.</p>
 
-<p>We sighed and scrambled to update our apps in production.</p>
+<h2>If you build it they will come</h2>
 
-<p>However, a couple of weeks later while debugging my personal server, I noticed that I had left a couple of toy apps unattended. I had totally forgotten about them, on account of the fact that I hadn&#8217;t touched them in well over a year. No one had visited these urls in forever and nothing important was stored on that machine, but we wiped the server as part of our standard operating procedure.</p>
+<p>Conferences without speakers are just parties. Which isn&#8217;t a bad thing, but we&#8217;re throwing a conference damnit! To be a conference, someone has to talk.</p>
 
-<p>After spending a couple of hours putting everything that wasn&#8217;t in a chef script back together, I felt really annoyed. The whole security process as we experience it <em>sucks</em>.</p>
+<p>At first, getting enough speakers concerned me the most. Having spoken at conferences before, I know how harrowing it can be to put yourself out there in front of a crowd. Because we were starting a brand new event, I was constantly anxious that no one would want to speak, thus forcing me to spend 6 hours performing magic tricks to entertain the attendees.</p>
 
-<p>It&#8217;s actually really hard to keep up to date with every single piece of ruby-related news. If you work on a small team, depending on your social network to communicate critical patches totally falls apart if you ever plan on spending time away from the computer. And once you&#8217;ve been a web developer for a few years you end up collecting a lot of apps, repositories and deployments you&#8217;re responsible for.</p>
+<p>This worry was entirely unfounded. I had no idea how many smart talented people are willing to show up to a hitherto unknown event with their research and perspectives.</p>
 
-<p>So, we decided to automate it.</p>
+<p>We had an amazing group of speakers show up, and I&#8217;m proud of all of them for making the conference the success that it was.</p>
 
-<p><a href="https://gemcanary.com">Gemcanary</a> will read your Gemfile.lock and notify you if any of your app&#8217;s dependencies become vulnerable.</p>
+<h2>The other kind of speakers matter too</h2>
 
-<p>Given that we&#8217;re a new consultancy, we found ourselves with some time between client projects and just went full blast for two weeks. It was a lot of fun to work on. Although not every itch is worth investing this much time into, building an app you intend strangers to depend on is a very humbling and educational experience.</p>
+<p>No matter how much you plan ahead, something will go wrong.</p>
 
-<p>There&#8217;s a more lot to be said about building apps on Github&#8217;s API, scratching itches and fixing the Ruby security process &mdash; which, through <a href="http://rubysec.github.com">Rubysec</a> we&#8217;re trying to be a part of &mdash; and this is something we&#8217;ll be exploring more of over the next few weeks.</p>
+<p>We ran the conference on two floors of the Monarch Tavern. We piped audio and video from the talks to televisions upstairs, so people could have a lounge like atmosphere while they watched the talks.</p>
+
+<p>I still think the model was solid. The &#8220;Hallway Track&#8221; is always a great experience at conferences. We wanted to create an atmosphere where you could converse with your friends while still paying attention to talks and not bothering other attendees.</p>
+
+<p>There were some issues with the audio quality upstairs, and my main lesson learned for next year is to improve the A/V experience as much as possible.</p>
+
+<h2>Sleep</h2>
+
+<p>Sleep is important. BsidesTO happened to be on the night of Nuit Blanche. If you went out that night, I&#8217;m impressed. I for one went home and slept for 36 hours.</p>
+
+<h2>In conclusion</h2>
+
+<p>Organizing BSidesTO was one of the best experiences I&#8217;ve had in 2013, and I hope you had a good time at the conference as well. My eternal thanks to everyone else involved: <a href="https://twitter.com/bitgamble">Jamie</a>, <a href="https://twitter.com/gattaca">Dave</a>, <a href="https://twitter.com/ironfog">Ben</a>, <a href="https://twitter.com/phillmv">Phill</a>, <a href="https://twitter.com/syzygos">Laura</a>, and the staff of <a href="http://www.themonarchtavern.com/">The Monarch</a>.</p>
 </div>
 
 
@@ -134,7 +148,7 @@
       
   
 
-<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/phillmv">Phillip Mendonça-Vieira</a></span></span>
+<span class="byline author vcard"><span class="fn"><a href="http://twitter.com/mveytsman">Max Veytsman</a></span></span>
 
       
 
@@ -149,12 +163,12 @@
 
 
 
-<time datetime="2013-03-08T00:40:00-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
+<time datetime="2013-11-30T12:00:00-05:00" pubdate data-updated="true">Nov 30<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/meta/'>meta</a>
+    <a class='category' href='/blog/categories/conferences/'>conferences</a>, <a class='category' href='/blog/categories/events/'>events</a>, <a class='category' href='/blog/categories/security/'>security</a>
   
 </span>
 
@@ -170,10 +184,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/11/09/hacking-letterpress/" title="Previous Post: Hacking Letterpress">&laquo; Hacking Letterpress</a>
+        <a class="basic-alignment left" href="/blog/2013/03/08/making-gemcanary/" title="Previous Post: What an MVP looks like: making gemcanary">&laquo; What an MVP looks like: making gemcanary</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/11/30/thoughts-on-bsidesto/" title="Next Post: Thoughts On Bsidesto">Thoughts On Bsidesto &raquo;</a>
       
     </p>
   </footer>
