@@ -4,7 +4,7 @@
   <title><![CDATA[Category: security | Finite State]]></title>
   <link href="http://stateio.github.com/blog/categories/security/atom.xml" rel="self"/>
   <link href="http://stateio.github.com/"/>
-  <updated>2014-01-10T17:45:01-05:00</updated>
+  <updated>2014-03-07T08:26:46-05:00</updated>
   <id>http://stateio.github.com/</id>
   <author>
     <name><![CDATA[State Machinery]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to locate any Tinder user]]></title>
+    <link href="http://stateio.github.com/blog/2014/02/25/how-to-locate-any-tinder-user/"/>
+    <updated>2014-02-25T10:09:00-05:00</updated>
+    <id>http://stateio.github.com/blog/2014/02/25/how-to-locate-any-tinder-user</id>
+    <content type="html"><![CDATA[<p>Last fall, while performing some bespoke security research for one of our clients, I found a way to locate any Tinder user using <a href="https://en.wikipedia.org/wiki/Trilateration">trilateration</a>. Here's what the proof of concept looks like:</p>
+
+<p><img src="/assets/images/tinder/04_found_max.png" alt="finding me" /></p>
+
+<p>I did a guest post over at the Include Security blog about <strong><a href="http://blog.includesecurity.com/2014/02/how-i-was-able-to-track-location-of-any.html">how I was able to track the location of any Tinder user</a></strong>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Thoughts On Bsidesto]]></title>
