@@ -127,7 +127,7 @@ For simplicity, I'm going to focus on Git, but this trick should work
 for any other commonly used VCS. Hooks are little shell scripts that
 run after you commit a certain action. For instance, a `post-commit`
 hook is a shell script that git will execute every time a commit is
-completed. Hooks are places in `.git/hooks/HOOK-NAME`.
+completed. Hooks are placed in `.git/hooks/HOOK-NAME`.
 
 So if I get on a Vagrant VM and want to escape into the host, all I
 have to do is create a post-commit hook. I simply put evil things in

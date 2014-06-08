@@ -14,8 +14,7 @@ I was hopelessly addicted to Letterpress until I figured out how to win consiste
 
 ![winning](/assets/images/letterpress/winning.png)
 
-As it turns out, Letterpress's dictionary and word check is stored and performed locally on your
-phone. By simply adding words to Letterpress's dictionary, you can register any
+As it turns out, letterpress's dictionary is stored on the device. By simply adding words to Letterpress's dictionary, you can register any
 combination of letters as a valid word. 
 
 Inside your iPhone, the dictionary is spread across a
@@ -24,7 +23,7 @@ folder>/Letterpress.app/o/[ab-zz].txt`. For instance, `ab.txt`
 contains all the words that begin with aa, and so on and so forth.
 
 However, digging around a bunch of text files is no fun, and so I decided to
-write a tool to help me out.  
+write a tool to help me out.
 
 By the way, the author of Letterpress does [know](https://twitter.com/lorenb/status/261617107656138752) about people cheating this way. 
 
@@ -37,14 +36,14 @@ Tools like
 other things, access an app's directory and modify the files there on any iPhone. (It's my understanding that they're using undocumented calls in the library iTunes uses for syncing in order to
 pull this off.)
 
-Since I didn't want to rely on a third party paid tool like iExplorer,
-I decided to use libimobiledevice.
+Since I didn't want to rely on a paid tool like iExplorer,
+I decided to use
 [libimobiledevice](http://www.libimobiledevice.org/). Libimobiledevice
 is an open-source library for talking to iDevices over USB. It's capable of providing
 access to the filesystem, the iPhone internals, and much more. 
 Libimobiledevice supports both OS X and Linux.
 
-So, I wrote a ruby gem that acts as an adapter for
+I wrote a ruby gem that acts as an adapter for
 libimobiledevice and exposes some of the API calls in an object-oriented way. It's available on github as
 [imobiledevice](https://github.com/stateio/imobiledevice). So far, I have
 implemented only the small subset of libimobiledevice that I need,
