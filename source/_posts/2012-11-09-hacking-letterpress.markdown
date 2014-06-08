@@ -36,9 +36,8 @@ Tools like
 other things, access an app's directory and modify the files there on any iPhone. (It's my understanding that they're using undocumented calls in the library iTunes uses for syncing in order to
 pull this off.)
 
-Since I didn't want to rely on a paid tool like iExplorer,
-I decided to use
-[libimobiledevice](http://www.libimobiledevice.org/). Libimobiledevice
+Since I didn't want to rely on a commercial tool like iExplorer,
+I decided to use [libimobiledevice](http://www.libimobiledevice.org/). Libimobiledevice
 is an open-source library for talking to iDevices over USB. It's capable of providing
 access to the filesystem, the iPhone internals, and much more. 
 Libimobiledevice supports both OS X and Linux.
